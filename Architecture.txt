@@ -1,0 +1,146 @@
+ARCHITECTURE OVERVIEW:
+                ┌──────────────────────────┐
+                │        Frontend          │
+                │  (React / Next.js UI)   │
+                │                          │
+                │ - Interview interface    │
+                │ - Webcam/audio capture   │
+                │ - Code editor (Monaco)   │
+                │ - Session review         │
+                └────────────┬─────────────┘
+                             │ REST/WebSocket
+                             ▼
+                ┌──────────────────────────┐
+                │        API Layer         │
+                │        FastAPI           │
+                │                          │
+                │ - Interview session API  │
+                │ - Question management    │
+                │ - Feedback generation    │
+                │ - Timer control          │
+                │ - Auth (future)          │
+                └────────────┬─────────────┘
+                             │
+         ┌───────────────────┼───────────────────┐
+         ▼                   ▼                   ▼
+┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+│ Speech Service │  │ AI Reasoning   │  │ Code Sandbox   │
+│ Piper          │  │ Service        │  │ Service        │
+│ Whisper STT    │  │ Local LLM      │  │ Docker Runner  │
+│                │  │ (via Ollama)   │  │                │
+│ Speech → Text  │  │ Follow-ups     │  │ Executes code  │
+└─────────┬──────┘  │ Feedback       │  │ safely         │
+          │         └─────────┬──────┘  └─────────┬──────┘
+          │                   │                   │
+          ▼                   ▼                   ▼
+                ┌──────────────────────────┐
+                │     Background Worker     │
+                │                  │
+                │                          │
+                │ - audio processing       │
+                │ - AI feedback analysis   │
+                │ - scoring evaluation     │
+                │ - question generation    │
+                └────────────┬─────────────┘
+                             │
+                             ▼
+                ┌──────────────────────────┐
+                │        Database          │
+                │       PostgreSQL         │
+                │                          │
+                │ users (future)           │
+                │ interview_sessions       │
+                │ interview_questions      │
+                │ interview_responses      │
+                │ transcripts              │
+                │ feedback_reports         │
+                └──────────────────────────┘
+
+
+FOLDER STRUCTURE: 
+
+interview-platform/
+
+backend/
+│
+├── app/
+│   ├── main.py
+│   ├── config.py
+│
+│   ├── api/
+│   │   ├── interview_routes.py
+│   │   ├── question_routes.py
+│   │   ├── session_routes.py
+│   │
+│   ├── services/
+│   │   ├── interview_service.py
+│   │   ├── feedback_service.py
+│   │   ├── timer_service.py
+│   │
+│   ├── ai/
+│   │   ├── llm_client.py
+│   │   ├── prompt_templates.py
+│   │   ├── feedback_engine.py
+│   │
+│   ├── speech/
+│   │   ├── whisper_service.py
+│   │   ├── tts_service.py
+│   │
+│   ├── sandbox/
+│   │   ├── code_executor.py
+│   │   ├── container.py
+│   │
+│   ├── workers/
+│   │   ├── ? TBA
+│   │   ├── tasks.py
+│   │
+│   ├── models/
+│   │   ├── interview_session.py
+│   │   ├── interview_question.py
+│   │   ├── interview_response.py
+│   │   ├── feedback.py
+│   │
+│   ├── schemas/
+│   │   ├── interview_schema.py
+│   │   ├── feedback_schema.py
+│   │
+│   ├── db/
+│   │   ├── database.py
+│   │   ├── migrations/
+│
+FRONTEND - TBA
+
+DATABASE DESIGN: 
+
+interview_sessions
+------------------
+id
+type (technical | behavioral)
+topic
+difficulty
+start_time
+end_time
+timer_duration
+
+questions
+---------
+id
+session_id
+question_text
+question_type
+
+responses
+---------
+id
+question_id
+transcript
+audio_file
+code_submission
+
+feedback
+--------
+id
+response_id
+score
+feedback_text
+improvement_tips

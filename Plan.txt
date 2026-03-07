@@ -1,0 +1,24 @@
+
+BASE FEATURES
+- Interviewee can input questions to study specific topics
+- Interviewee can select from pre-built topic questions if they don't have specific questions in mind
+- AI has a voice, and user's voice is also being recorded. Both voices are captured in a text log for review and feedback.
+- AI can provide feedback on the interviewee's answers, including suggestions for improvement and areas to focus on.
+- Interviewee can review past interview sessions, including the questions asked, their responses, and AI feedback.
+- How would scale of feedback work? Would it be a simple score, or more detailed feedback with specific suggestions for improvement?
+- Interviewee can select from technical interview or behavioral interview.
+- Technical interviews would need to allow for coding questions and run code in a sandbox.
+- Interviewee can set timer on interview sessions simulate a real interview
+
+ADVANCED FEATURES (FUTURE WORK)
+    - Interviewee's performance is based off Problem-Solving skills, code comprehension, communication skills, code quality, debugging skills, and time management.
+    - Interviewee can select from different difficulty levels for questions (easy, medium, hard).
+    - Interviewee can select from different programming languages for technical interviews but for now Python is the only option.
+    - Interviewee can select from different AI personalities for the interviewer (e.g., friendly, strict, technical).
+    - Interview can work similar to Anki flashcards where interviewee can review specific questions and answers to reinforce learning based on time intervals and difficulty level.
+        - This may need log in and user accounts to track progress and schedule reviews.
+
+Tech Stack: FastAPI, PostgreSQL, Docker, Whisper, Piper, Ollama, React, CSS, JavaScript, Monaco Editor
+    
+To-do: 
+- TBA
