@@ -57,90 +57,64 @@ ARCHITECTURE OVERVIEW:
                 └──────────────────────────┘
 
 
-FOLDER STRUCTURE: 
-
-interview-platform/
-
-backend/
-│
-├── app/
-│   ├── main.py
-│   ├── config.py
-│
-│   ├── api/
-│   │   ├── interview_routes.py
-│   │   ├── question_routes.py
-│   │   ├── session_routes.py
-│   │
-│   ├── services/
-│   │   ├── interview_service.py
-│   │   ├── feedback_service.py
-│   │   ├── timer_service.py
-│   │
-│   ├── ai/
-│   │   ├── llm_client.py
-│   │   ├── prompt_templates.py
-│   │   ├── feedback_engine.py
-│   │
-│   ├── speech/
-│   │   ├── whisper_service.py
-│   │   ├── tts_service.py
-│   │
-│   ├── sandbox/
-│   │   ├── code_executor.py
-│   │   ├── container.py
-│   │
-│   ├── workers/
-│   │   ├── ? TBA
-│   │   ├── tasks.py
-│   │
-│   ├── models/
-│   │   ├── interview_session.py
-│   │   ├── interview_question.py
-│   │   ├── interview_response.py
-│   │   ├── feedback.py
-│   │
-│   ├── schemas/
-│   │   ├── interview_schema.py
-│   │   ├── feedback_schema.py
-│   │
-│   ├── db/
-│   │   ├── database.py
-│   │   ├── migrations/
-│
-FRONTEND - TBA
 
 DATABASE DESIGN: 
+
+question_bank
+------------------
+id
+questions_idlist (list of question ids)
+topic React | Python | System Design | etc.
+
+question
+------------------
+id
+question_text
+question_type (coding | behavioral | system design)
+difficulty (easy | medium | hard)
+topic React | Python | System Design | etc.
+time_limit (in seconds, optional for coding questions)
+questionbank_id (foreign key to question_bank)
 
 interview_sessions
 ------------------
 id
 type (technical | behavioral)
-topic
-difficulty
-start_time
-end_time
+topic React | Python | System Design | etc.
+difficulty (easy | medium | hard)
+is_completed true | false
+time_started
+time_ended
+question_bank_id (foreign key to question_bank)
 timer_duration
+responses (list of responses associated with this session, foreign key to responses table), each response has a number/index which is tied to response_order
 
-questions
----------
+feedback
+------------------
 id
-session_id
-question_text
-question_type
+feedback_text
+interview_session_id (foreign key to interview_sessions)
+audio_feedback (file path or blob)
+question_id (foreign key to question, optional - may not be tied to a specific question)
 
 responses
 ---------
 id
+type_of_response (question | feedback)
 question_id
-transcript
-audio_file
-code_submission
+question_text (foreign key to question)
+feedback_id (foreign key to feedback, optional if type_of_response is question)
+feedback_text (foreign key to feedback, optional if type_of_response is question)
+interview_session_id
+response_text
+audio_response (file path or blob)
+response_order
 
-feedback
---------
+interviewee
+------------------
 id
-response_id
-score
-feedback_text
-improvement_tips
+name
+
+
+
+
