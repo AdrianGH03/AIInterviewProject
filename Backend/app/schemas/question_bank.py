@@ -15,5 +15,11 @@ class QuestionBankCreate(QuestionBankBase):
 class QuestionBankRead(QuestionBankBase):
     id: int
     created_at: datetime
+    questions: list["QuestionRead"] = []
 
     model_config = {"from_attributes": True}
+
+
+from app.schemas.question import QuestionRead  # noqa: E402
+
+QuestionBankRead.model_rebuild()
