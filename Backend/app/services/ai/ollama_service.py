@@ -59,6 +59,30 @@ def _build_system_prompt(
     return f"{base}\n\nTopic: {topic}\n{diff}"
 
 
+async def query_ollama(
+    messages: list[dict[str, str]],
+    system_prompt: str = "",
+) -> str:
+    """Low-level Ollama query with an optional system prompt."""
+    ollama_messages = []
+    if system_prompt:
+        ollama_messages.append({"role": "system", "content": system_prompt})
+    ollama_messages.extend(messages)
+
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        resp = await client.post(
+            f"{settings.OLLAMA_BASE_URL}/api/chat",
+            json={
+                "model": settings.OLLAMA_MODEL,
+                "messages": ollama_messages,
+                "stream": False,
+            },
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        return data["message"]["content"]
+
+
 async def chat_with_ollama(
     messages: list[dict[str, str]],
     interview_type: str = "technical",

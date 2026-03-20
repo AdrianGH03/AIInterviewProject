@@ -63,45 +63,97 @@ async def interview_websocket(websocket: WebSocket, session_id: int):
         response_order = 0
         all_questions_answered = False
 
-        # Generate opening question
-        if bank_questions:
-            # Use the first question from the bank
-            q = bank_questions[bank_question_index]
-            bank_question_index += 1
-            opening_msg = (
-                f"You are conducting a {session.type} interview on {session.topic}. "
-                f"Ask the candidate the following question exactly as written, "
-                f"then wait for their answer:\n\n{q.question_text}"
+        # Check if session is already completed
+        if session.is_completed:
+            await websocket.send_json(
+                {"type": "error", "detail": "Session is already completed"}
             )
+            await websocket.close()
+            return
+
+        # Check for existing responses (session resume)
+        existing_responses = (
+            db.query(ResponseModel)
+            .filter(ResponseModel.interview_session_id == session_id)
+            .order_by(ResponseModel.response_order)
+            .all()
+        )
+
+        if existing_responses:
+            # Send conversation history to client for resume
+            history = [
+                {
+                    "type_of_response": r.type_of_response,
+                    "response_text": r.response_text,
+                    "response_order": r.response_order,
+                }
+                for r in existing_responses
+            ]
+            await websocket.send_json({"type": "history", "messages": history})
+
+            # Rebuild conversation context
+            for r in existing_responses:
+                if r.type_of_response == "answer":
+                    conversation.append(
+                        {"role": "user", "content": r.response_text}
+                    )
+                elif r.type_of_response == "ai_question":
+                    conversation.append(
+                        {"role": "assistant", "content": r.response_text}
+                    )
+
+            response_order = existing_responses[-1].response_order + 1
+
+            # Calculate bank question position
+            if bank_questions:
+                ai_count = sum(
+                    1
+                    for r in existing_responses
+                    if r.type_of_response == "ai_question"
+                )
+                bank_question_index = min(ai_count, len(bank_questions))
+                if bank_question_index >= len(bank_questions):
+                    all_questions_answered = True
         else:
-            opening_msg = (
-                f"Start this {session.type} interview on {session.topic}. "
-                f"Ask the first {session.difficulty}-level question. "
-                f"Only output the question, nothing else."
+            # Generate opening question
+            if bank_questions:
+                # Use the first question from the bank
+                q = bank_questions[bank_question_index]
+                bank_question_index += 1
+                opening_msg = (
+                    f"You are conducting a {session.type} interview on {session.topic}. "
+                    f"Ask the candidate the following question exactly as written, "
+                    f"then wait for their answer:\n\n{q.question_text}"
+                )
+            else:
+                opening_msg = (
+                    f"Start this {session.type} interview on {session.topic}. "
+                    f"Ask the first {session.difficulty}-level question. "
+                    f"Only output the question, nothing else."
+                )
+
+            conversation.append({"role": "user", "content": opening_msg})
+
+            ai_reply = await chat_with_ollama(
+                conversation,
+                interview_type=session.type,
+                topic=session.topic,
+                difficulty=session.difficulty,
             )
+            conversation.append({"role": "assistant", "content": ai_reply})
 
-        conversation.append({"role": "user", "content": opening_msg})
+            # Store the AI's opening question as a response record
+            ai_response = ResponseModel(
+                type_of_response="ai_question",
+                interview_session_id=session_id,
+                response_text=ai_reply,
+                response_order=response_order,
+            )
+            db.add(ai_response)
+            db.commit()
+            response_order += 1
 
-        ai_reply = await chat_with_ollama(
-            conversation,
-            interview_type=session.type,
-            topic=session.topic,
-            difficulty=session.difficulty,
-        )
-        conversation.append({"role": "assistant", "content": ai_reply})
-
-        # Store the AI's opening question as a response record
-        ai_response = ResponseModel(
-            type_of_response="ai_question",
-            interview_session_id=session_id,
-            response_text=ai_reply,
-            response_order=response_order,
-        )
-        db.add(ai_response)
-        db.commit()
-        response_order += 1
-
-        await websocket.send_json({"type": "ai_message", "content": ai_reply})
+            await websocket.send_json({"type": "ai_message", "content": ai_reply})
 
         # Main conversation loop
         while True:

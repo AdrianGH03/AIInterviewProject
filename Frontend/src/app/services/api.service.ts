@@ -13,6 +13,11 @@ import {
   InterviewResponse,
   CodeRunRequest,
   CodeRunResponse,
+  JobParseResponse,
+  ReviewCard,
+  ReviewCardWithQuestion,
+  ReviewStats,
+  JobBankCreateRequest,
 } from '../models/interfaces';
 
 @Injectable({ providedIn: 'root' })
@@ -131,5 +136,64 @@ export class ApiService {
 
   runCode(data: CodeRunRequest): Observable<CodeRunResponse> {
     return this.http.post<CodeRunResponse>(`${this.baseUrl}/sandbox/run`, data);
+  }
+
+  // ── Bulk Questions ──────────────────────────────────────
+
+  createQuestionsBulk(data: QuestionCreate[]): Observable<Question[]> {
+    return this.http.post<Question[]>(`${this.baseUrl}/questions/bulk`, data);
+  }
+
+  // ── Job Description ─────────────────────────────────────
+
+  scrapeJobUrl(url: string): Observable<{ text: string }> {
+    return this.http.post<{ text: string }>(`${this.baseUrl}/jobs/scrape-url`, { url });
+  }
+
+  generateQuestionsFromJob(text: string, companyName: string = ''): Observable<JobParseResponse> {
+    return this.http.post<JobParseResponse>(
+      `${this.baseUrl}/jobs/generate-questions`,
+      { text, company_name: companyName }
+    );
+  }
+
+  createBanksFromJob(data: JobBankCreateRequest): Observable<QuestionBank[]> {
+    return this.http.post<QuestionBank[]>(`${this.baseUrl}/jobs/create-banks`, data);
+  }
+
+  // ── Review / Spaced Repetition ──────────────────────────
+
+  getReviewCards(): Observable<ReviewCardWithQuestion[]> {
+    return this.http.get<ReviewCardWithQuestion[]>(`${this.baseUrl}/reviews/`);
+  }
+
+  getDueCards(): Observable<ReviewCardWithQuestion[]> {
+    return this.http.get<ReviewCardWithQuestion[]>(`${this.baseUrl}/reviews/due`);
+  }
+
+  getReviewStats(): Observable<ReviewStats> {
+    return this.http.get<ReviewStats>(`${this.baseUrl}/reviews/stats`);
+  }
+
+  createReviewCard(data: { question_id: number; notes?: string }): Observable<ReviewCard> {
+    return this.http.post<ReviewCard>(`${this.baseUrl}/reviews/`, data);
+  }
+
+  reviewCard(cardId: number, quality: number): Observable<ReviewCard> {
+    return this.http.post<ReviewCard>(`${this.baseUrl}/reviews/${cardId}/review`, { quality });
+  }
+
+  updateCardNotes(cardId: number, notes: string): Observable<ReviewCard> {
+    return this.http.patch<ReviewCard>(`${this.baseUrl}/reviews/${cardId}/notes`, { notes });
+  }
+
+  deleteReviewCard(cardId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/reviews/${cardId}`);
+  }
+
+  // ── In-Progress Sessions ────────────────────────────────
+
+  getInProgressSessions(): Observable<InterviewSession[]> {
+    return this.http.get<InterviewSession[]>(`${this.baseUrl}/sessions/in-progress`);
   }
 }

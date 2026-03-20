@@ -4,6 +4,7 @@ from app.schemas.feedback import FeedbackCreate, FeedbackRead
 from app.schemas.response import ResponseCreate, ResponseRead
 from app.schemas.interview_session import InterviewSessionCreate, InterviewSessionRead
 from app.schemas.interviewee import IntervieweeCreate, IntervieweeRead
+from app.schemas.review_card import ReviewCardCreate, ReviewCardRead, ReviewCardWithQuestion
 
 __all__ = [
     "QuestionBankCreate",
@@ -18,4 +19,7 @@ __all__ = [
     "InterviewSessionRead",
     "IntervieweeCreate",
     "IntervieweeRead",
+    "ReviewCardCreate",
+    "ReviewCardRead",
+    "ReviewCardWithQuestion",
 ]

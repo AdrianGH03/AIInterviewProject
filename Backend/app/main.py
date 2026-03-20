@@ -13,6 +13,8 @@ from app.routes.response_endpoints import router as response_router
 from app.routes.sandbox_endpoints import router as sandbox_router
 from app.routes.session_endpoints import router as session_router
 from app.routes.speech_endpoints import router as speech_router
+from app.routes.job_endpoints import router as job_router
+from app.routes.review_endpoints import router as review_router
 
 app = FastAPI(title="AI Interview API", version="1.0.0")
 
@@ -37,6 +39,8 @@ app.include_router(response_router)
 app.include_router(interviewee_router)
 app.include_router(speech_router)
 app.include_router(sandbox_router)
+app.include_router(job_router)
+app.include_router(review_router)
 
 # WebSocket route
 app.include_router(interview_ws_router)

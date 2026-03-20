@@ -9,6 +9,25 @@ from app.schemas.question import QuestionCreate
 
 
 
+def create_questions_bulk(db: Session, questions: list[QuestionCreate]) -> list[Question]:
+    created = []
+    for data in questions:
+        question = Question(
+            question_text=data.question_text,
+            question_type=data.question_type,
+            difficulty=data.difficulty,
+            topic=data.topic,
+            time_limit=data.time_limit,
+            questionbank_id=data.questionbank_id,
+        )
+        db.add(question)
+        created.append(question)
+    db.commit()
+    for q in created:
+        db.refresh(q)
+    return created
+
+
 def create_question(db: Session, data: QuestionCreate) -> Question:
     question = Question(
         question_text=data.question_text,

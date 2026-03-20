@@ -19,23 +19,23 @@ declare const monaco: any;
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="code-editor-wrapper rounded-lg overflow-hidden border border-slate-700">
+    <div class="code-editor-wrapper rounded-xl overflow-hidden border border-zinc-800/50 bg-zinc-900/50">
       <!-- Language selector & run button -->
-      <div class="flex items-center justify-between bg-slate-800 px-4 py-2 border-b border-slate-700">
+      <div class="flex items-center justify-between bg-zinc-900/80 px-4 py-2 border-b border-zinc-800/50">
         <div class="flex items-center gap-3">
           <select
             [value]="language"
             (change)="onLanguageChange($event)"
-            class="bg-slate-700 border border-slate-600 text-white rounded px-2 py-1 text-sm focus:outline-none">
+            class="dark-input rounded px-2 py-1 text-sm">
             <option value="python">Python</option>
           </select>
-          <span class="text-slate-500 text-xs">Code Editor</span>
+          <span class="text-zinc-600 text-xs">Code Editor</span>
         </div>
         <div class="flex items-center gap-2">
           <button
             (click)="onRun()"
             [disabled]="isRunning"
-            class="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-1.5">
+            class="btn-gradient disabled:opacity-30 px-4 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5">
             @if (isRunning) {
               <svg class="animate-spin h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -48,7 +48,7 @@ declare const monaco: any;
           </button>
           <button
             (click)="onReset()"
-            class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1.5 rounded text-sm transition-colors">
+            class="bg-zinc-800 border border-zinc-700 hover:border-zinc-600 text-zinc-300 px-3 py-1.5 rounded-lg text-sm transition-all duration-200">
             Reset
           </button>
         </div>
@@ -59,13 +59,13 @@ declare const monaco: any;
 
       <!-- Output panel -->
       @if (showOutput) {
-        <div class="bg-slate-900 border-t border-slate-700">
-          <div class="flex items-center justify-between px-4 py-1.5 bg-slate-800/50">
-            <span class="text-slate-400 text-xs font-medium">Output</span>
-            <button (click)="showOutput = false" class="text-slate-500 hover:text-slate-300 text-xs">✕</button>
+        <div class="bg-[#0c0c14] border-t border-zinc-800/50">
+          <div class="flex items-center justify-between px-4 py-1.5 bg-zinc-900/80">
+            <span class="text-zinc-500 text-xs font-medium">Output</span>
+            <button (click)="showOutput = false" class="text-zinc-600 hover:text-zinc-400 text-xs">✕</button>
           </div>
           <pre class="p-4 text-sm font-mono max-h-48 overflow-auto whitespace-pre-wrap"
-               [class]="outputError ? 'text-red-400' : 'text-green-300'">{{ output }}</pre>
+               [class]="outputError ? 'text-red-400' : 'text-emerald-400'">{{ output }}</pre>
         </div>
       }
     </div>
@@ -115,9 +115,11 @@ export class CodeEditorComponent implements AfterViewInit, OnDestroy {
         inherit: true,
         rules: [],
         colors: {
-          'editor.background': '#1e293b',
-          'editor.lineHighlightBackground': '#334155',
-          'editorLineNumber.foreground': '#64748b',
+          'editor.background': '#0c0c14',
+          'editor.lineHighlightBackground': '#18182b',
+          'editorLineNumber.foreground': '#3f3f5c',
+          'editor.selectionBackground': '#7c3aed33',
+          'editorCursor.foreground': '#8b5cf6',
         },
       });
 

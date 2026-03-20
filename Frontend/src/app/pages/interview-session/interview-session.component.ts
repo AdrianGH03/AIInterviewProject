@@ -14,63 +14,67 @@ import { CodeEditorComponent } from '../../components/code-editor/code-editor.co
   standalone: true,
   imports: [CommonModule, FormsModule, CodeEditorComponent],
   template: `
-    <div class="h-[calc(100vh-4rem)] flex flex-col bg-slate-900">
+    <div class="h-[calc(100vh-3.5rem)] flex flex-col bg-[#09090b]">
       <!-- Header Bar -->
-      <div class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex items-center justify-between shrink-0">
+      <div class="bg-[#09090b]/80 backdrop-blur-xl border-b border-zinc-800/50 px-6 py-2.5 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full" [class]="isConnected ? 'bg-green-400' : 'bg-red-400'"></div>
-            <span class="text-slate-300 text-sm">{{ isConnected ? 'Connected' : 'Disconnected' }}</span>
+            <div class="w-1.5 h-1.5 rounded-full" [class]="isConnected ? 'bg-emerald-400 shadow-sm shadow-emerald-400/50' : 'bg-zinc-600'"></div>
+            <span class="text-zinc-500 text-xs">{{ isConnected ? 'Connected' : 'Disconnected' }}</span>
           </div>
           @if (session) {
-            <span class="text-slate-500 text-sm">
+            <span class="text-zinc-600 text-xs">
               {{ session.topic }} · {{ session.type | titlecase }} · {{ session.difficulty | titlecase }}
             </span>
           }
         </div>
-        <div class="flex items-center gap-4">
-          <!-- Code Editor Toggle (only for technical interviews) -->
+        <div class="flex items-center gap-3">
           @if (session?.type === 'technical') {
             <button (click)="showCodeEditor = !showCodeEditor"
-                    class="px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                    class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 border"
                     [class]="showCodeEditor
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-700 hover:bg-slate-600 text-slate-300'">
+                      ? 'bg-violet-500/15 text-violet-400 border-violet-500/30'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700'">
               {{ showCodeEditor ? 'Hide Editor' : 'Code Editor' }}
             </button>
           }
-          <!-- Timer -->
+          @if (audio.isPlaying) {
+            <button (click)="audio.stopAudio()"
+                    class="px-3 py-1.5 rounded-lg text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-700 transition-all duration-200">
+              Stop Audio
+            </button>
+          }
           @if (timerDuration > 0) {
-            <div class="font-mono text-lg"
-                 [class]="timeRemaining <= 60 ? 'text-red-400' : 'text-white'">
+            <div class="font-mono text-sm px-3 py-1 rounded-lg"
+                 [class]="timeRemaining <= 60 ? 'text-red-400 bg-red-500/10 border border-red-500/20' : 'text-zinc-300 bg-zinc-900 border border-zinc-800'">
               {{ formatTime(timeRemaining) }}
             </div>
           }
           <button (click)="endInterview()"
-                  class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                  class="btn-gradient px-4 py-1.5 rounded-lg text-xs font-medium">
             End Interview
           </button>
         </div>
       </div>
 
-      <!-- Main content area: chat + optional code editor -->
+      <!-- Main content area -->
       <div class="flex-1 flex overflow-hidden">
         <!-- Chat Panel -->
         <div class="flex-1 flex flex-col min-w-0" [class]="showCodeEditor ? 'w-1/2' : 'w-full'">
-          <!-- Chat Messages Area -->
-          <div #chatContainer class="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+          <!-- Chat Messages -->
+          <div #chatContainer class="flex-1 overflow-y-auto px-6 py-4 space-y-3">
             @for (msg of messages; track $index) {
-              <div class="flex" [class]="msg.role === 'user' ? 'justify-end' : 'justify-start'">
-                <div class="max-w-[70%] rounded-lg p-4"
+              <div class="flex animate-fade-in" [class]="msg.role === 'user' ? 'justify-end' : 'justify-start'">
+                <div class="max-w-[70%] rounded-2xl px-4 py-3"
                      [class]="msg.role === 'user'
-                       ? 'bg-indigo-600 text-white'
-                       : 'bg-slate-800 text-slate-200 border border-slate-700'">
-                  <div class="text-xs mb-1"
-                       [class]="msg.role === 'user' ? 'text-indigo-200' : 'text-slate-500'">
+                       ? 'bg-linear-to-br from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/10'
+                       : 'bg-zinc-900/80 text-zinc-200 border border-zinc-800/50'">
+                  <div class="text-[10px] mb-1 uppercase tracking-wider font-medium"
+                       [class]="msg.role === 'user' ? 'text-violet-200/60' : 'text-zinc-500'">
                     {{ msg.role === 'user' ? 'You' : 'AI Interviewer' }}
                   </div>
-                  <div class="whitespace-pre-wrap">{{ msg.content }}</div>
-                  <div class="text-xs mt-2 opacity-50">
+                  <div class="whitespace-pre-wrap text-sm leading-relaxed">{{ msg.content }}</div>
+                  <div class="text-[10px] mt-2 opacity-40">
                     {{ msg.timestamp | date:'shortTime' }}
                   </div>
                 </div>
@@ -78,13 +82,13 @@ import { CodeEditorComponent } from '../../components/code-editor/code-editor.co
             }
 
             @if (isAiThinking) {
-              <div class="flex justify-start">
-                <div class="bg-slate-800 text-slate-400 border border-slate-700 rounded-lg p-4">
-                  <div class="flex items-center gap-2">
+              <div class="flex justify-start animate-fade-in">
+                <div class="bg-zinc-900/80 text-zinc-500 border border-zinc-800/50 rounded-2xl px-4 py-3">
+                  <div class="flex items-center gap-2 text-sm">
                     <div class="flex gap-1">
-                      <div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce"></div>
-                      <div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:0.1s]"></div>
-                      <div class="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                      <div class="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce"></div>
+                      <div class="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce [animation-delay:0.1s]"></div>
+                      <div class="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce [animation-delay:0.2s]"></div>
                     </div>
                     AI is thinking...
                   </div>
@@ -93,80 +97,82 @@ import { CodeEditorComponent } from '../../components/code-editor/code-editor.co
             }
 
             @if (errorMessage) {
-              <div class="flex justify-center">
-                <div class="bg-red-900/50 text-red-300 border border-red-700 rounded-lg p-4 max-w-lg text-center">
-                  <div class="font-medium mb-1">Connection Error</div>
-                  <div class="text-sm">{{ errorMessage }}</div>
+              <div class="flex justify-center animate-fade-in">
+                <div class="bg-red-500/10 text-red-400 border border-red-500/20 rounded-2xl px-4 py-3 max-w-lg text-center">
+                  <div class="font-medium mb-1 text-sm">Connection Error</div>
+                  <div class="text-xs text-red-400/70">{{ errorMessage }}</div>
                   <button (click)="retryConnection()"
-                          class="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors">
-                    Retry Connection
+                          class="mt-2 btn-gradient px-3 py-1 rounded text-xs font-medium">
+                    Retry
                   </button>
                 </div>
               </div>
             }
 
-            <!-- Final Feedback -->
             @if (feedbackText) {
-              <div class="bg-slate-800 border-2 border-indigo-500 rounded-xl p-6 mx-auto max-w-3xl">
-                <h3 class="text-lg font-semibold text-indigo-400 mb-3">Session Feedback</h3>
-                <div class="text-slate-300 whitespace-pre-wrap">{{ feedbackText }}</div>
+              <div class="bg-zinc-900/80 border border-violet-500/30 rounded-2xl p-6 mx-auto max-w-3xl animate-fade-scale shadow-lg shadow-violet-500/5">
+                <h3 class="text-sm font-semibold text-violet-400 mb-3 uppercase tracking-wider">Session Feedback</h3>
+                <div class="text-zinc-300 whitespace-pre-wrap text-sm leading-relaxed">{{ feedbackText }}</div>
               </div>
             }
           </div>
 
           <!-- Input Area -->
           @if (!sessionEnded) {
-            <div class="bg-slate-800 border-t border-slate-700 px-6 py-4 shrink-0">
+            <div class="bg-[#09090b]/80 backdrop-blur-xl border-t border-zinc-800/50 px-6 py-3 shrink-0">
+              @if (isRecording && liveText) {
+                <div class="mb-2 text-xs text-zinc-500 flex items-center gap-2">
+                  <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow-sm shadow-red-500/50"></div>
+                  Recording — edit text below before sending
+                </div>
+              }
               <div class="flex items-end gap-3 max-w-4xl mx-auto">
-                <!-- Mic Button -->
                 <button (click)="toggleRecording()"
-                        class="shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-colors"
+                        class="shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 border"
                         [class]="isRecording
-                          ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse'
-                          : 'bg-slate-700 hover:bg-slate-600 text-slate-300'">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                          ? 'bg-red-500 border-red-500 text-white animate-pulse shadow-lg shadow-red-500/30'
+                          : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700'">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                   </svg>
                 </button>
 
-                <!-- Text Input -->
                 <textarea
                   #inputField
                   [(ngModel)]="userInput"
                   (keydown.enter)="onEnterKey($event)"
                   placeholder="Type your answer or click the mic to speak..."
                   rows="2"
-                  class="flex-1 bg-slate-700 border border-slate-600 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-500 resize-none">
+                  class="flex-1 dark-input rounded-xl px-4 py-2.5 text-sm resize-none">
                 </textarea>
 
-                <!-- Send Button -->
                 <button (click)="sendMessage()"
                         [disabled]="!userInput.trim() || isAiThinking"
-                        class="shrink-0 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        class="shrink-0 btn-gradient disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none px-5 py-2.5 rounded-xl text-sm font-medium">
                   Send
                 </button>
               </div>
             </div>
           } @else {
-            <div class="bg-slate-800 border-t border-slate-700 px-6 py-4 text-center">
-              <p class="text-slate-400 mb-3">Interview session has ended.</p>
-              <div class="flex justify-center gap-4">
-                <a class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors cursor-pointer"
+            <div class="bg-[#09090b]/80 backdrop-blur-xl border-t border-zinc-800/50 px-6 py-4 text-center">
+              <p class="text-zinc-500 mb-3 text-sm">Interview session has ended.</p>
+              <div class="flex justify-center gap-3">
+                <a class="btn-gradient px-5 py-2 rounded-lg text-sm font-medium cursor-pointer"
                    (click)="goToHistory()">
                   View Session Details
                 </a>
-                <a class="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded-lg font-medium transition-colors cursor-pointer"
+                <a class="bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer"
                    (click)="goToSetup()">
-                  Start Another Interview
+                  Start Another
                 </a>
               </div>
             </div>
           }
         </div>
 
-        <!-- Code Editor Panel (technical interviews only) -->
+        <!-- Code Editor Panel -->
         @if (showCodeEditor && session?.type === 'technical') {
-          <div class="w-1/2 border-l border-slate-700 flex flex-col">
+          <div class="w-1/2 border-l border-zinc-800/50 flex flex-col">
             <app-code-editor
               [initialCode]="codeEditorInitialCode"
               [editorHeight]="editorHeight"
@@ -194,8 +200,8 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
   sessionEnded = false;
   feedbackText = '';
   errorMessage = '';
+  liveText = '';
 
-  // Code editor state
   showCodeEditor = false;
   isCodeRunning = false;
   currentCode = '';
@@ -208,13 +214,14 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
 
   private sessionId = 0;
   private wsSub: Subscription | null = null;
+  private liveSub: Subscription | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
     private ws: WebSocketService,
-    private audio: AudioService,
+    public audio: AudioService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -226,11 +233,17 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
         this.session = session;
         this.timerDuration = session.timer_duration;
         this.timeRemaining = session.timer_duration;
-
-        if (this.timerDuration > 0) {
-          this.startTimer();
-        }
+        if (this.timerDuration > 0) this.startTimer();
       },
+    });
+
+    // Subscribe to live transcription updates
+    this.liveSub = this.audio.liveTranscript$.subscribe((text) => {
+      if (this.isRecording) {
+        this.userInput = text;
+        this.liveText = text;
+        this.cdr.detectChanges();
+      }
     });
 
     this.connectWebSocket();
@@ -238,7 +251,9 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.wsSub?.unsubscribe();
+    this.liveSub?.unsubscribe();
     this.ws.disconnect();
+    this.audio.stopAudio();
     if (this.timerInterval) clearInterval(this.timerInterval);
   }
 
@@ -253,6 +268,20 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
             this.errorMessage = '';
             break;
 
+          case 'history':
+            // Rebuild chat from stored responses (session resume)
+            if (msg.messages) {
+              this.messages = msg.messages.map((m: any) => ({
+                role: m.type_of_response === 'answer' ? 'user' as const : 'ai' as const,
+                content: m.response_text || '',
+                timestamp: new Date(),
+              }));
+              this.scrollToBottom();
+            }
+            this.isAiThinking = false;
+            this.isConnected = true;
+            break;
+
           case 'ai_message':
             this.isAiThinking = false;
             this.isConnected = true;
@@ -263,7 +292,6 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
               timestamp: new Date(),
             });
             this.scrollToBottom();
-            // Play AI response as speech via TTS
             if (msg.content) {
               this.api.textToSpeech(msg.content).subscribe({
                 next: (audioBlob) => this.audio.playAudio(audioBlob),
@@ -288,7 +316,6 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
             this.isAiThinking = false;
             this.isConnected = false;
             this.errorMessage = msg.detail || 'An unexpected error occurred.';
-            console.error('WS Error:', msg.detail);
             this.scrollToBottom();
             break;
         }
@@ -316,6 +343,7 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
     this.messages.push({ role: 'user', content: text, timestamp: new Date() });
     this.ws.sendMessage(text);
     this.userInput = '';
+    this.liveText = '';
     this.isAiThinking = true;
     this.errorMessage = '';
     this.scrollToBottom();
@@ -331,21 +359,26 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
 
   async toggleRecording(): Promise<void> {
     if (this.isRecording) {
+      // Stop recording — text is already in the input from live transcription
       this.isRecording = false;
       this.cdr.detectChanges();
       const blob = await this.audio.stopRecording();
-      this.api.speechToText(blob).subscribe({
-        next: (res) => {
-          this.userInput = res.text;
-          this.cdr.detectChanges();
-          // Auto-send the transcribed voice message
-          this.sendMessage();
-        },
-      });
+
+      // If live transcription didn't produce text, fall back to Whisper
+      if (!this.userInput.trim()) {
+        this.api.speechToText(blob).subscribe({
+          next: (res) => {
+            this.userInput = res.text;
+            this.cdr.detectChanges();
+          },
+        });
+      }
+      // Do NOT auto-send — let user review/edit the text first
     } else {
       try {
         await this.audio.startRecording();
         this.isRecording = true;
+        this.liveText = '';
         this.cdr.detectChanges();
       } catch {
         console.error('Microphone access denied');
@@ -354,15 +387,14 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
   }
 
   endInterview(): void {
+    this.audio.stopAudio();
     if (this.ws.isOpen) {
       this.isAiThinking = true;
       this.ws.endSession();
     } else {
-      // WebSocket not connected, just end locally
       this.sessionEnded = true;
       this.isConnected = false;
       if (this.timerInterval) clearInterval(this.timerInterval);
-      // Mark session as complete via REST API
       this.api.completeSession(this.sessionId).subscribe();
     }
   }
@@ -406,7 +438,7 @@ export class InterviewSessionComponent implements OnInit, OnDestroy {
         this.codeEditor?.setOutput(result.stdout, result.stderr, result.timed_out);
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.isCodeRunning = false;
         this.codeEditor?.setOutput('', 'Failed to execute code. Is the backend running?', false);
         this.cdr.detectChanges();

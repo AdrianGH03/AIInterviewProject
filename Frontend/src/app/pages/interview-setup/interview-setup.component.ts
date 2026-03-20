@@ -10,39 +10,39 @@ import { QuestionBank, InterviewSessionCreate } from '../../models/interfaces';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="max-w-2xl mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold text-white mb-2">Start New Interview</h1>
-      <p class="text-slate-400 mb-8">Configure your practice interview session.</p>
+    <div class="max-w-2xl mx-auto px-6 py-12 animate-fade-in">
+      <h1 class="text-3xl font-bold text-white mb-2 tracking-tight">Start New Interview</h1>
+      <p class="text-zinc-500 mb-10 text-sm">Configure your practice interview session.</p>
 
-      <div class="space-y-6">
+      <div class="space-y-8">
         <!-- Interview Type -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-3">Interview Type</label>
+          <label class="block text-sm font-medium text-zinc-400 mb-3">Interview Type</label>
           <div class="grid grid-cols-2 gap-4">
             <button (click)="config.type = 'technical'"
-                    class="p-4 rounded-lg border-2 transition-all text-left"
+                    class="p-4 rounded-xl border transition-all duration-200 text-left"
                     [class]="config.type === 'technical'
-                      ? 'border-indigo-500 bg-indigo-600/10 text-white'
-                      : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-500'">
-              <div class="font-semibold mb-1">Technical</div>
-              <div class="text-sm opacity-75">Coding, system design, concepts</div>
+                      ? 'border-violet-500/50 bg-violet-500/10 text-white shadow-lg shadow-violet-500/10'
+                      : 'border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:border-zinc-700'">
+              <div class="font-semibold mb-1 text-sm">Technical</div>
+              <div class="text-xs opacity-70">Coding, system design, concepts</div>
             </button>
             <button (click)="config.type = 'behavioral'"
-                    class="p-4 rounded-lg border-2 transition-all text-left"
+                    class="p-4 rounded-xl border transition-all duration-200 text-left"
                     [class]="config.type === 'behavioral'
-                      ? 'border-green-500 bg-green-600/10 text-white'
-                      : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-500'">
-              <div class="font-semibold mb-1">Behavioral</div>
-              <div class="text-sm opacity-75">STAR method, leadership, teamwork</div>
+                      ? 'border-violet-500/50 bg-violet-500/10 text-white shadow-lg shadow-violet-500/10'
+                      : 'border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:border-zinc-700'">
+              <div class="font-semibold mb-1 text-sm">Behavioral</div>
+              <div class="text-xs opacity-70">STAR method, leadership, teamwork</div>
             </button>
           </div>
         </div>
 
         <!-- Topic -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">Topic</label>
+          <label class="block text-sm font-medium text-zinc-400 mb-2">Topic</label>
           <select [(ngModel)]="config.topic"
-                  class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  class="w-full dark-input rounded-xl px-4 py-3 text-sm">
             @for (topic of topics; track topic) {
               <option [value]="topic">{{ topic }}</option>
             }
@@ -51,24 +51,24 @@ import { QuestionBank, InterviewSessionCreate } from '../../models/interfaces';
 
         <!-- Custom Topic -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">Or enter a custom topic</label>
+          <label class="block text-sm font-medium text-zinc-400 mb-2">Or enter a custom topic</label>
           <input type="text"
                  [(ngModel)]="customTopic"
                  placeholder="e.g. GraphQL, Kubernetes, AWS..."
-                 class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-slate-500">
+                 class="w-full dark-input rounded-xl px-4 py-3 text-sm">
         </div>
 
         <!-- Difficulty -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-3">Difficulty</label>
+          <label class="block text-sm font-medium text-zinc-400 mb-3">Difficulty</label>
           <div class="grid grid-cols-3 gap-4">
             @for (diff of difficulties; track diff.value) {
               <button (click)="config.difficulty = diff.value"
-                      class="p-3 rounded-lg border-2 transition-all text-center"
+                      class="p-3 rounded-xl border transition-all duration-200 text-center text-sm"
                       [class]="config.difficulty === diff.value
-                        ? 'border-indigo-500 bg-indigo-600/10 text-white'
-                        : 'border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-500'">
-                <div class="font-semibold">{{ diff.label }}</div>
+                        ? 'border-violet-500/50 bg-violet-500/10 text-white font-semibold shadow-lg shadow-violet-500/10'
+                        : 'border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:border-zinc-700'">
+                {{ diff.label }}
               </button>
             }
           </div>
@@ -76,22 +76,22 @@ import { QuestionBank, InterviewSessionCreate } from '../../models/interfaces';
 
         <!-- Timer Duration -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">
+          <label class="block text-sm font-medium text-zinc-400 mb-2">
             Timer Duration (minutes) — 0 for no timer
           </label>
           <input type="number"
                  [(ngModel)]="timerMinutes"
                  min="0" max="120"
-                 class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                 class="w-full dark-input rounded-xl px-4 py-3 text-sm">
         </div>
 
         <!-- Question Bank (optional) -->
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-2">
+          <label class="block text-sm font-medium text-zinc-400 mb-2">
             Question Bank (optional)
           </label>
           <select [(ngModel)]="selectedBankId"
-                  class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  class="w-full dark-input rounded-xl px-4 py-3 text-sm">
             <option [ngValue]="null">None — AI will generate questions</option>
             @for (bank of questionBanks; track bank.id) {
               <option [ngValue]="bank.id">{{ bank.name }} ({{ bank.topic }})</option>
@@ -102,7 +102,7 @@ import { QuestionBank, InterviewSessionCreate } from '../../models/interfaces';
         <!-- Start Button -->
         <button (click)="startInterview()"
                 [disabled]="isLoading"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-colors text-lg">
+                class="w-full btn-gradient font-medium py-3.5 rounded-xl text-sm">
           @if (isLoading) {
             Starting Interview...
           } @else {

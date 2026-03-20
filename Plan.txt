@@ -20,7 +20,23 @@ ADVANCED FEATURES (FUTURE WORK)
 
 Tech Stack: FastAPI, PostgreSQL, Docker, Whisper, Piper, Ollama, Angular, CSS, TypeScript, Monaco Editor, Tailwind CSS
     
+CURRENT APP-FEATURES:
+- Interviewee can select from pre-built topic questions if they don't have specific questions in mind
+- AI has a voice, and user's voice is also being recorded. Both voices are captured in
+    a text log for review and feedback.
+- AI can provide feedback on the interviewee's answers, including suggestions for improvement and areas to focus on.
+- Interviewee can review past interview sessions, including the questions asked, their responses, and AI
+    feedback.
+- Interviewee can select from technical interview or behavioral interview.
+- Technical interviews would need to allow for coding questions and run code in a sandbox.
+- Interviewee can set timer on interview sessions simulate a real interview
+- Anki style review cards based on past interview sessions to reinforce learning based on time intervals and difficulty level.
+- Question banks can be generated from job descriptions to help interviewees prepare for specific roles.
+- user can customize their interview by selecting various topics, difficulty levels, and question types to tailor the interview experience to their specific needs and goals.
+- Interview sessions are tracked so that interviewees can monitor their progress over time and identify areas for improvement.
+
+
 To-do:
-- Clean up UI
-- Make it easier to add bulk amounts of questions
-- Cut off AI audio after a certain amount of time to prevent it from going on forever, especially with large amounts of text.
+- Different tones for the AI interviewer (friendly, strict, technical)
+- Easier questions, the prompt is currently generating very difficult questions that may be discouraging for users. Need to adjust the prompt to generate easier questions as well.
+- Add more detailed feedback for interviewee's answers, including specific suggestions for improvement and areas to focus on.

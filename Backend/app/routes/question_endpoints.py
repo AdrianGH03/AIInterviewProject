@@ -4,6 +4,7 @@ from app.db.dependencies import get_db
 from app.schemas.question import QuestionCreate, QuestionRead
 from app.services.questions.question_logic import (
     create_question,
+    create_questions_bulk,
     get_question,
     get_all_questions,
     get_questions_by_bank,
@@ -17,6 +18,11 @@ router = APIRouter(prefix="/questions", tags=["Questions"])
 @router.post("/", response_model=QuestionRead, status_code=201)
 def create(data: QuestionCreate, db: Session = Depends(get_db)):
     return create_question(db, data)
+
+
+@router.post("/bulk", response_model=list[QuestionRead], status_code=201)
+def create_bulk(data: list[QuestionCreate], db: Session = Depends(get_db)):
+    return create_questions_bulk(db, data)
 
 
 @router.get("/", response_model=list[QuestionRead])

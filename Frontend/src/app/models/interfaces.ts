@@ -77,15 +77,22 @@ export interface InterviewResponse {
   created_at: string;
 }
 
+export interface WSServerMessage {
+  type: 'ai_message' | 'feedback' | 'session_ended' | 'error' | 'connected' | 'history';
+  content?: string;
+  detail?: string;
+  messages?: HistoryMessage[];
+}
+
+export interface HistoryMessage {
+  type_of_response: string;
+  response_text: string;
+  response_order: number;
+}
+
 export interface WSMessage {
   type: 'message' | 'end_session';
   content?: string;
-}
-
-export interface WSServerMessage {
-  type: 'ai_message' | 'feedback' | 'session_ended' | 'error' | 'connected';
-  content?: string;
-  detail?: string;
 }
 
 export interface ChatMessage {
@@ -105,4 +112,58 @@ export interface CodeRunResponse {
   stderr: string;
   exit_code: number;
   timed_out: boolean;
+}
+
+// ── Job Description Parsing ───────────────────────────────
+
+export interface GeneratedQuestion {
+  text: string;
+  type: string;
+  difficulty: string;
+}
+
+export interface JobCategory {
+  name: string;
+  questions: GeneratedQuestion[];
+}
+
+export interface JobParseResponse {
+  categories: JobCategory[];
+  company_name?: string;
+  raw_text?: string;
+}
+
+// ── Review / Spaced Repetition ────────────────────────────
+
+export interface ReviewCard {
+  id: number;
+  question_id: number;
+  ease_factor: number;
+  interval_days: number;
+  repetitions: number;
+  next_review_at: string;
+  last_reviewed_at: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface ReviewCardWithQuestion extends ReviewCard {
+  question_text: string;
+  question_type: string;
+  difficulty: string;
+  topic: string;
+}
+
+export interface ReviewStats {
+  total_cards: number;
+  due_today: number;
+  reviewed_today: number;
+}
+
+export interface JobBankCreateRequest {
+  company_name: string;
+  categories: {
+    name: string;
+    questions: GeneratedQuestion[];
+  }[];
 }

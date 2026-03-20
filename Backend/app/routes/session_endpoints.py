@@ -8,6 +8,7 @@ from app.services.sessions.interview_session_logic import (
     create_interview_session,
     delete_interview_session,
     get_all_interview_sessions,
+    get_in_progress_sessions,
     get_interview_session,
     update_interview_session,
 )
@@ -23,6 +24,11 @@ def create_session(data: InterviewSessionCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=list[InterviewSessionRead])
 def list_sessions(db: Session = Depends(get_db)):
     return get_all_interview_sessions(db)
+
+
+@router.get("/in-progress", response_model=list[InterviewSessionRead])
+def list_in_progress(db: Session = Depends(get_db)):
+    return get_in_progress_sessions(db)
 
 
 @router.get("/{session_id}", response_model=InterviewSessionRead)

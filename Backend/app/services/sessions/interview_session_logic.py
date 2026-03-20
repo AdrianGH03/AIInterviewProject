@@ -58,6 +58,15 @@ def update_interview_session(
     return session
 
 
+def get_in_progress_sessions(db: Session) -> list[InterviewSession]:
+    return (
+        db.query(InterviewSession)
+        .filter(InterviewSession.is_completed == False)
+        .order_by(InterviewSession.created_at.desc())
+        .all()
+    )
+
+
 def delete_interview_session(db: Session, session_id: int) -> bool:
     session = get_interview_session(db, session_id)
     if not session:
