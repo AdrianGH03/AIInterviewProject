@@ -36,7 +36,7 @@
 
 ## 🧰 Tech Stack
 
-- **Frontend:** Angular 21, Tailwind CSS  
+- **Frontend:** Angular 21, Tailwind CSS, Claude  
 - **Backend:** Python, FastAPI, SQLAlchemy, Pydantic  
 - **Database:** PostgreSQL  
 - **AI:** Ollama (Llama 3.1)  
