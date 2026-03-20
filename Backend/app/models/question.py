@@ -11,10 +11,10 @@ class Question(Base):
     question_text: Mapped[str] = mapped_column(Text, nullable=False)
     question_type: Mapped[str] = mapped_column(
         String(50), nullable=False
-    )  # coding | behavioral | system_design
+    )  #coding | behavioral | system_design
     difficulty: Mapped[str] = mapped_column(
         String(20), nullable=False
-    )  # easy | medium | hard
+    )  #easy | medium | hard
     topic: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     time_limit: Mapped[int | None] = mapped_column(Integer, nullable=True)
     questionbank_id: Mapped[int | None] = mapped_column(

@@ -10,11 +10,11 @@ class InterviewSession(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     type: Mapped[str] = mapped_column(
         String(50), nullable=False
-    )  # technical | behavioral
+    )  #technical | behavioral
     topic: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     difficulty: Mapped[str] = mapped_column(
         String(20), nullable=False
-    )  # easy | medium | hard
+    )  #easy | medium | hard
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     time_started: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     time_ended: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

@@ -11,7 +11,7 @@ class Response(Base):
 
     type_of_response: Mapped[str] = mapped_column(
         String(30), nullable=False
-    )  # answer | ai_feedback_event
+    )  #answer | ai_feedback_event
 
     question_id: Mapped[int | None] = mapped_column(
         ForeignKey("questions.id", ondelete="SET NULL"),

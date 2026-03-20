@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.db.database import SessionLocal
+from app.db.dependencies import get_db
 from app.schemas.question_bank import QuestionBankCreate, QuestionBankRead
 from app.services.questions.question_bank_logic import (
     create_question_bank,
@@ -11,14 +11,6 @@ from app.services.questions.question_bank_logic import (
 )
 
 router = APIRouter(prefix="/question-banks", tags=["Question Banks"])
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/", response_model=QuestionBankRead, status_code=201)

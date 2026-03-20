@@ -1,0 +1,69 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Justin2660123
+      POSTGRES_DB: ai_interview
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  backend:
+    build: ./Backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:Justin2660123@db:5432/ai_interview
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: llama3.1:8b
+      FRONTEND_URL: http://localhost:4200
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      ollama:
+        condition: service_started
+    volumes:
+      - ./Backend:/code
+      - backend_audio:/code/audio_output
+      - backend_uploads:/code/audio_uploads
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  ollama_data:
+  backend_audio:
+  backend_uploads:

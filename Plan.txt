@@ -18,7 +18,9 @@ ADVANCED FEATURES (FUTURE WORK)
     - Interview can work similar to Anki flashcards where interviewee can review specific questions and answers to reinforce learning based on time intervals and difficulty level.
         - This may need log in and user accounts to track progress and schedule reviews.
 
-Tech Stack: FastAPI, PostgreSQL, Docker, Whisper, Piper, Ollama, React, CSS, JavaScript, Monaco Editor
+Tech Stack: FastAPI, PostgreSQL, Docker, Whisper, Piper, Ollama, Angular, CSS, TypeScript, Monaco Editor, Tailwind CSS
     
-To-do: 
-- TBA
+To-do:
+- Clean up UI
+- Make it easier to add bulk amounts of questions
+- Cut off AI audio after a certain amount of time to prevent it from going on forever, especially with large amounts of text.
