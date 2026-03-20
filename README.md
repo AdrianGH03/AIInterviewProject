@@ -48,6 +48,12 @@
 
 ## 🎥 Demo and Screenshots
 
+https://github.com/user-attachments/assets/f356fcf3-052f-4f55-96d8-3cf4a341861e
+
+
+
+
+
 
 <img width="1885" height="909" alt="image" src="https://github.com/user-attachments/assets/62da21c2-90bf-4922-9473-4cc5582a45d5" />
 
