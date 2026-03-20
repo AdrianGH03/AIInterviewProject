@@ -48,7 +48,10 @@
 
 ## 🎥 Demo and Screenshots
 
-<!-- Add screenshots and demo videos here -->
+
+https://github.com/user-attachments/assets/f356fcf3-052f-4f55-96d8-3cf4a341861e
+
+
 
 ---
 
@@ -56,7 +59,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/AdrianGH03/PrepPilot
+   git clone https://github.com/AdrianGH03/AIInterviewProject
    ```
 
 2. Create a `.env` file in `Backend/` with:
@@ -154,7 +157,7 @@ npm start
 ## License
 
 ```
-Copyright [2025] [Adrian Gomez]
+Copyright [2026] [Miguel Gomez]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
