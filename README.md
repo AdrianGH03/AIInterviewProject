@@ -48,7 +48,16 @@
 
 ## 🎥 Demo and Screenshots
 
-<!-- Add screenshots and demo videos here -->
+
+<img width="1885" height="909" alt="image" src="https://github.com/user-attachments/assets/62da21c2-90bf-4922-9473-4cc5582a45d5" />
+
+
+
+<img width="1873" height="906" alt="image" src="https://github.com/user-attachments/assets/9f0afc0b-f475-45ea-8c35-b032da800825" />
+<img width="1896" height="912" alt="image" src="https://github.com/user-attachments/assets/aedfe4b9-2320-464a-9f5f-aea2b3c51788" />
+<img width="1905" height="925" alt="image" src="https://github.com/user-attachments/assets/9b1afa8d-32be-4635-85f4-3d56ae1749a2" />
+
+
 
 ---
 
@@ -56,7 +65,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/AdrianGH03/PrepPilot
+   git clone https://github.com/AdrianGH03/AIInterviewProject
    ```
 
 2. Create a `.env` file in `Backend/` with:
@@ -154,7 +163,7 @@ npm start
 ## License
 
 ```
-Copyright [2025] [Adrian Gomez]
+Copyright [2026] [Miguel Gomez]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
