@@ -119,7 +119,7 @@ uvicorn app.main:app --reload
 ```bash
 cd frontend
 npm install
-npm start
+ng serve
 ```
 
 ---
