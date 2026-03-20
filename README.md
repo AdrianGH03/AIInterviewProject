@@ -49,7 +49,10 @@
 ## 🎥 Demo and Screenshots
 
 
-https://github.com/user-attachments/assets/f356fcf3-052f-4f55-96d8-3cf4a341861e
+https://github.com/user-attachments/assets/ba7044cd-76d4-444e-810d-20a58a19015c
+<img width="1873" height="906" alt="image" src="https://github.com/user-attachments/assets/9f0afc0b-f475-45ea-8c35-b032da800825" />
+<img width="1896" height="912" alt="image" src="https://github.com/user-attachments/assets/aedfe4b9-2320-464a-9f5f-aea2b3c51788" />
+<img width="1905" height="925" alt="image" src="https://github.com/user-attachments/assets/9b1afa8d-32be-4635-85f4-3d56ae1749a2" />
 
 
 
