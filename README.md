@@ -49,7 +49,8 @@
 ## 🎥 Demo and Screenshots
 
 
-https://github.com/user-attachments/assets/ba7044cd-76d4-444e-810d-20a58a19015c
+<img width="1885" height="909" alt="image" src="https://github.com/user-attachments/assets/62da21c2-90bf-4922-9473-4cc5582a45d5" />
+
 
 
 <img width="1873" height="906" alt="image" src="https://github.com/user-attachments/assets/9f0afc0b-f475-45ea-8c35-b032da800825" />
