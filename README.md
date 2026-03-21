@@ -49,6 +49,15 @@
 ## 🎥 Demo and Screenshots
 
 
+
+https://github.com/user-attachments/assets/ecdbba2a-9697-4d9d-b0c0-bcc271b64982
+
+
+
+
+
+
+
 <img width="1885" height="909" alt="image" src="https://github.com/user-attachments/assets/62da21c2-90bf-4922-9473-4cc5582a45d5" />
 
 
@@ -119,7 +128,7 @@ uvicorn app.main:app --reload
 ```bash
 cd frontend
 npm install
-npm start
+ng serve
 ```
 
 ---
