@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.models import QuestionBank
 from app.schemas.question_bank import QuestionBankCreate
 
-
+#Same concepts as in interviewee_logic.py in services/interviewees
 def create_question_bank(db: Session, data: QuestionBankCreate) -> QuestionBank:
     bank = QuestionBank(
         topic=data.topic,

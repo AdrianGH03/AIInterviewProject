@@ -3,15 +3,13 @@ from sqlalchemy import ForeignKey, Text, Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.database import Base
 
-
+#Response parameters created here, reference feedback.py for more info
 class Response(Base):
     __tablename__ = "responses"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
-    type_of_response: Mapped[str] = mapped_column(
-        String(30), nullable=False
-    )  #answer | ai_feedback_event
+    type_of_response: Mapped[str] = mapped_column(String(30), nullable=False)  
 
     question_id: Mapped[int | None] = mapped_column(
         ForeignKey("questions.id", ondelete="SET NULL"),

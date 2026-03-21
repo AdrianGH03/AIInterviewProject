@@ -1,0 +1,221 @@
+#SHORT RESPONSES FOR ANSWERS ONLY. BE CONCISE AND TO THE POINT. NO EXPLANATIONS UNLESS ASKED FOR.
+
+Q Virtual environment is for what?
+- Allowing Python to run in the project instead of deriving from the system Python, which may have different versions and dependencies.
+ It creates an isolated environment for the project, ensuring that the required packages and versions are used without affecting the global Python installation.
+
+Q What are the commands to run the backend?
+- Activate virtual env, so .venv\Scripts\activate
+
+Q How do you install pip and upgrade it?
+- python -m pip install --upgrade pip
+
+Q What is pip for?
+- Pip is a package manager for Python that allows you to install and manage additional libraries and dependencies that are not included in the standard Python library.
+ It simplifies the process of installing and managing third-party packages, making it easier to add functionality to your Python projects.
+
+Q What does this line mean and what does each library do and for what? "pip install fastapi uvicorn sqlalchemy psycopg2-binary alembic pydantic python-dotenv celery redis httpx"
+- fastapi: A modern, fast (high-performance) web framework for building APIs with Python 3.6+ based on standard Python type hints.
+- uvicorn: A lightning-fast ASGI server implementation, using uvloop and httptools. (ASGI is a specification for Python web servers and applications to communicate with each other)
+- sqlalchemy: A SQL toolkit and Object-Relational Mapping (ORM) library for Python. It provides a high-level interface for working with databases, allowing developers to interact with databases using Python objects instead of writing raw SQL queries.
+- psycopg2-binary: A PostgreSQL adapter for Python. It allows Python code to interact with a PostgreSQL database, enabling you to execute SQL commands and manage database connections.
+- alembic: A database migration tool for SQLAlchemy. It helps manage database schema changes over time, allowing you to create, modify, and maintain your database schema in a version-controlled manner.
+- pydantic: A data validation and settings management library for Python. It uses Python type annotations to validate and parse data, making it easier to work with complex data structures and ensuring that the data conforms to the expected types.
+- python-dotenv: A library that allows you to read key-value pairs from a .env file and set them as environment variables. This is useful for managing configuration settings and secrets in a secure and organized way.
+- celery: An asynchronous task queue/job queue based on distributed message passing. It is focused on real-time operation but also supports scheduling. Celery is used to execute tasks in the background, allowing for better performance and responsiveness in web applications.
+- redis: An in-memory data structure store, used as a database, cache, and message broker. In the context of Celery, Redis is often used as a message broker to manage task queues.
+- httpx: A fully featured HTTP client for Python, which provides a simple and intuitive API for making HTTP requests. It supports features like connection pooling, HTTP/2, and asynchronous requests, making it a powerful tool for interacting with web services and APIs.
+| Purpose               | Package         |
+| --------------------- | --------------- |
+| API framework         | fastapi         |
+| server                | uvicorn         |
+| database ORM          | sqlalchemy      |
+| PostgreSQL driver     | psycopg2-binary |
+| database migrations   | alembic         |
+| validation            | pydantic        |
+| environment variables | python-dotenv   |
+| background jobs       | celery          |
+| message broker        | redis           |
+| HTTP communication    | httpx           |
+
+Q How do you stop the virtual environment?
+- To stop the virtual environment, you can simply run the command `deactivate` in your terminal. This will exit the virtual environment and return you to the global Python environment.
+
+Q How do you delete a virtual environment?
+- Remove-Item -Recurse -Force .\app\venv
+
+Q Difference between .\venv\Scripts\Activate.ps1 and .\venv\Scripts\activate?
+- The command `.\venv\Scripts\Activate.ps1` is used to activate the virtual environment in PowerShell, while `.\venv\Scripts\activate` is used to activate the virtual environment in 
+Command Prompt (cmd). The former is specific to PowerShell, and the latter is specific to Command Prompt. Depending on which terminal you are using, you would use the 
+appropriate command to activate the virtual environment.
+
+Q How do you save project dependencies/libraries to a file?
+- You can save project dependencies to a file using the command `pip freeze > requirements.txt`. This will create a `requirements.txt` file that lists all the installed packages 
+and their versions in the current virtual environment. This file can then be used to recreate the same environment by running `pip install -r requirements.txt` in another environment.
+
+Q Do you have to freeze dependencies every time you install a new library?
+- It is a good practice to freeze dependencies every time you install a new library, especially if you want to maintain a consistent environment across different machines 
+or for future reference. 
+
+Q Do you need to update Dockerfile every time you install a new library?
+- Yes, you need to update the Dockerfile every time you install a new library. The Dockerfile typically includes instructions to install the required dependencies for your application. 
+When you add a new library, you should update the Dockerfile to include the installation of that library so that when you build the Docker image, it will have all the necessary dependencies installed.
+
+Q How does Docker work with your structure of FastAPI backend, Postgres Database, and Redis for Celery?
+- Docker allows you to containerize your application and its dependencies, making it easier to manage and deploy. In your structure, you would create 
+separate Docker containers for the FastAPI backend, PostgreSQL database, and Redis for Celery. Each container would run its respective service, 
+and they can communicate with each other through Docker's networking features. 
+
+Q What does each file do in the Backend project directory?
+- Dockerfile = tells Docker how to build your FastAPI app
+- docker-compose.yml = starts your backend, Postgres, and Redis together
+- .dockerignore = stops useless files from being copied into the image
+- .env = stores your connection settings
+
+Q How do you exit a Ollama model session? And to start one?
+- type /bye to end the session and return to the command prompt. This will allow you to start a new session or run other commands as needed.
+- ollama run llama3.1:8b
+
+Q How to run whisper on file ? 
+- whisper .\filename --model small.en --language en --output_format txt
+
+Q What is Alembic and why do you need it?
+- Alembic is a database migration tool for SQLAlchemy. It helps manage database schema changes over time, allowing you to create, modify, and maintain your database schema in a version-controlled manner.
+    It is useful for tracking changes to the database schema, applying those changes to different environments, and ensuring that the database structure is consistent across development, testing, and production.
+    It tracks schema changes over time, like:
+
+create table
+
+add column
+
+remove column
+
+change foreign key
+
+rename things
+
+Q What is a websocket?
+- Two way pipe/connection to allow client and server to send messages to each other at any point in time.
+
+Q Websocket vs HTTP requests?
+- For HTTP, the client can send a request and the server responds 1 time and done, but with Websocket, the connection stay open indefinitely.
+- HTTP is good for fetching data, WebSocket is good for real-time interactions/streaming.
+
+Q What is a generator function in Python?
+- A generator function is a special type of function that returns an iterator. It allows you to iterate over a sequence of values without having to store the entire sequence in memory at once.
+- Instead of using the `return` statement to return a value, a generator function uses the `yield` statement to produce a value and pause the function's execution. When the generator is called again, it resumes from where it left off, allowing you to generate values on-the-fly as needed.
+
+Q What is the importance an __init__.py file in a Python package?
+- The `__init__.py` file is important in a Python package because it indicates that the directory it is in should be treated as a package. It can be an empty file, but it can also contain initialization code for the package or define what is available when the package is imported.
+- It allows you to organize your code into modules and subpackages, making it easier to manage and reuse code across different parts of your application. 
+
+Q What does the __all__ variable do in a Python module?
+- The `__all__` variable is a list of strings that defines the public interface of a module. It specifies which names should be imported when a user imports the module using `from module import *`.
+- If `__all__` is defined, only the names listed in it will be imported
+
+Q What is Mapped in SQLAlchemy?
+- `Mapped` is a type hint in SQLAlchemy that indicates that a class attribute is mapped to a database column. 
+- Its basically tying a parameter to a column in a table, so that when you create an instance of the class, it will correspond to a row in the database table with the specified column values.
+
+Q What is mapped_column in SQLAlchemy?
+- `mapped_column` is a function in SQLAlchemy that is used to define a column in a mapped class. It is typically used in conjunction with the `Mapped` type hint to specify the details of how a class attribute should be mapped to a database column, such as the column name, data type, and any constraints or options for that column.
+
+Q What does index=true do in a mapped_column?
+shorter responses please from this point on
+- `index=True` creates an index on that column in the database, which can improve query performance when filtering or sorting by that column.
+
+Q What does the first parameter in mapped_column do?
+- The first parameter in `mapped_column` specifies the data type of the column in the database, such as `Integer`, `String`, `DateTime`, etc. This tells SQLAlchemy how to handle the data for that column when interacting with the database.
+
+Q What does the second parameter in mapped_column do?
+- The second parameter in `mapped_column` is typically used to specify additional options or constraints for the column, such as `primary_key=True`, `nullable=False`, `unique=True`, etc. These options define how the column behaves in the database, such as whether it can be null, whether it must be unique, or whether it is a primary key.
+
+Q How can you set a default value for a column in SQLAlchemy?
+- You can set a default value for a column in SQLAlchemy by using the `default` parameter in the `mapped_column` function. For example, `mapped_column(String, default='default_value')` would set the default value of that column to 'default_value' if no value is provided when creating a new record.
+- Or you can set a value to null to later update it, using nullable=True and default=None, and then update it later with the actual value. This is useful when you want to create a record without having all the information upfront, and then fill in the missing details later on.
+
+Q What is a ForeignKey() method in a mapped_column?
+- The `ForeignKey()` method in a `mapped_column` is used to define a foreign key constraint on that column. It specifies that the values in that column must correspond to values in a column of another table, creating a relationship between the two tables. For example, `mapped_column(Integer, ForeignKey('other_table.id'))` would indicate that the values in this column must match the `id` column in the `other_table`, establishing a link between the two tables based on that relationship.
+
+Q What does the ondelete="CASCADE" option do in a ForeignKey() method?
+- Deletes all related records from the child table when the parent (foreign key) is deleted.
+
+Q What is the relationship() function in SQLAlchemy used for?
+- Create relationship between two objects, back_populates make sure the other object is updated when one is modified.
+
+Q What does String(50) do in a mapped_column?
+- Specifies the type of the column as a string and a max of 50 characters in it.
+
+Q What does APIRouter() do in FastAPI?
+- It allows you to create modular, reusable route handlers in FastAPI. You can define a set of routes in an APIRouter and then include that router in your main application, helping to organize your code and manage different parts of your API more effectively.
+
+Q What does prefix and tags do in APIRouter()?
+- `prefix` is used to specify a common path prefix for all routes defined in that router
+- `tags` is used to group routes together in the API documentation, making it easier to navigate and understand the different endpoints in your API.
+
+Q What are the different CRUD operations and their corresponding HTTP methods in FastAPI routers?
+- Create: router.post()
+- Read: router.get()
+- Update: router.put() or router.patch()
+- Delete: router.delete()
+
+Q What does the create() function do in the context of a FastAPI router?
+- The `create()` function in the context of a FastAPI router is typically used to handle the creation of new resources. It is often associated with the HTTP POST method and is responsible for accepting data from the client, validating it, and then creating a new record in the database or performing some action based on that data. The specific implementation of the `create()` function can vary depending on the application and its requirements.
+
+Q What does Depends() do in FastAPI?
+- `Depends()` is a function in FastAPI that is used to declare dependencies for a route handler. It allows you to specify that a certain function or class should be executed before the route handler is called, and the result of that function can be passed as an argument to the route handler. This is commonly used for things like authentication, database sessions, or any other setup that needs to happen before processing a request.
+
+Q Schema vs Model?
+- A schema is a Pydantic model that defines the structure of the data that is sent to and from the API, while a model is a SQLAlchemy class that defines the structure of the database table and how it maps to Python objects. Schemas are used for data validation and serialization, while models are used for database interactions.
+- Schemas are typically used in the API layer to define the expected input and output data formats, while models are used in the data access layer to interact with the database.
+
+Q What is the @field_validator() decorator in Pydantic used for?
+- The `@field_validator()` decorator in Pydantic is used to define custom validation logic for a specific field in a Pydantic model. It allows you to create a function that will be called to validate the value of that field whenever an instance of the model is created or updated. This is useful for enforcing specific rules or constraints on the data, such as ensuring that a string is not empty, a number falls within a certain range, or that a value meets certain formatting requirements.
+
+Q What is the urlparse() function in Python used for?
+- The `urlparse()` function in Python is used to parse a URL into its components, such as the scheme, netloc, path, params, query, and fragment. 
+
+Q What is @classmethod in Python?
+- The `@classmethod` decorator in Python is used to define a method that belongs to the class rather than an instance of the class. 
+
+Q What is circular dependency and how do you solve it?
+- Circular dependency occurs when two or more modules depend on each other, creating a loop that can lead to import errors. To solve it, you can:
+  - Refactor the code to remove the circular dependency by moving shared functionality to a separate module.
+  - Use local imports within functions instead of global imports at the top of the file to delay the import until it's needed.
+  - Use dependency injection to pass instances of classes instead of importing them directly.
+
+Q What is HTTPX?
+-An async http client library used to make requests like async/await to the Ollama AI server
+
+Q What does BeautifulSoup do?
+- BeautifulSoup is a Python library used for parsing HTML and XML documents. It provides a simple way to navigate and search through the document's structure, making it easier to extract data from web pages or XML files. It is commonly used for web scraping tasks, allowing developers to extract information from websites by parsing the HTML content.
+
+Q What two parameters do you need to pass to BeautifulSoup to parse a webpage?
+- The HTML content of the webpage and the parser to use (e.g., 'html.parser' or 'lxml').
+
+Q What is an SM-2 algorithm?
+- The SM-2 algorithm is a spaced repetition algorithm used to optimize the review schedule of flash
+cards based on the user's performance. It adjusts the intervals between reviews based on how well the user recalls the information, with the goal of maximizing retention while minimizing the number of reviews needed. The algorithm takes into account factors such as the quality of recall and the ease factor to determine when a card should be reviewed again.
+
+Q What is an Ease Factor in the SM-2 algorithm?
+- The Ease Factor in the SM-2 algorithm is a value that represents how easy or difficult
+a flashcard is for the user to recall. It is used to adjust the intervals between reviews based on the user's performance. A higher Ease Factor indicates that the card is easier for the user to recall, while a lower Ease Factor indicates that the card is more difficult. The algorithm uses the Ease Factor to determine how much to increase or decrease the review intervals after each review, helping to optimize the learning process.
+
+Q What does NamedTemporaryFile do and where is it from?
+- `NamedTemporaryFile` is a function from the `tempfile` module in Python. It creates a temporary file that can be used for storing data temporarily during the execution of a program. The file is created with a unique name and is automatically deleted when it is closed or when the program exits. This is useful for situations where you need to work with files but do not want to create permanent files on the filesystem.
+
+Q What does the with and as keywords do in Python when working with files?
+- The `with` keyword in Python is used to wrap the execution of a block of code with methods defined by a context manager. When working with files, it ensures that the file is properly closed after its suite finishes, even if an exception is raised. 
+- The `as` keyword is used to assign the file object to a variable, allowing you to work with the file within the block of code. 
+
+Q What does the Path() function do and where is it from?
+- The `Path()` function is from the `pathlib` module in Python. It is used to create a `Path` object that represents a filesystem path. This object provides various methods and properties for working with file paths, such as joining paths, checking if a path exists, creating directories, and more.
+
+Q What is the subprocess.run() function used for in Python?
+- The `subprocess.run()` function in Python is used to run a command in the terminal or command prompt from within a Python script. It allows you to execute external commands and programs, and it provides options for capturing the output, handling errors, and controlling the execution environment. This function is commonly used for tasks such as running shell commands, executing scripts, or interacting with other programs from a Python application.
+
+Q What does the is_relative_to() method do in the context of file paths?
+- The `is_relative_to()` method is used to check if a given path is relative to another path. It returns `True` if the path is a subpath of the specified base path, and `False` otherwise. This is useful for ensuring that a file or directory is located within a certain directory structure, which can help prevent security issues such as path traversal attacks.
+
+Q what does the uuid.uuid4().hex do?
+- `uuid.uuid4().hex` generates a random UUID (Universally Unique Identifier) and returns it as a hexadecimal string. This is often used to create unique identifiers for files, database entries, or any other situation where a unique value is needed. The `uuid4()` function generates a random UUID based on random numbers, and the `hex` property converts it to a string representation without dashes.

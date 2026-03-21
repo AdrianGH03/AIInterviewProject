@@ -3,7 +3,7 @@ from sqlalchemy import Integer, Float, ForeignKey, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.database import Base
 
-
+#Review Card parameters created here, reference feedback.py for more info
 class ReviewCard(Base):
     __tablename__ = "review_cards"
 

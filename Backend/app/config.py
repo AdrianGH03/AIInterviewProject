@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
+#This pretty much creates the env variables for the project so FastAPI/Python can understand it with pydantic.
 class Settings(BaseSettings):
     DATABASE_URL: str
 

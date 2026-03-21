@@ -8,7 +8,7 @@ from app.models import Question
 from app.schemas.question import QuestionCreate
 
 
-
+#Same concepts as in interviewee_logic.py in services/interviewees
 def create_questions_bulk(db: Session, questions: list[QuestionCreate]) -> list[Question]:
     created = []
     for data in questions:

@@ -3,7 +3,7 @@ from sqlalchemy import String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from app.db.database import Base
 
-
+#Interviewee parameters created here, reference feedback.py for more info
 class Interviewee(Base):
     __tablename__ = "interviewees"
 

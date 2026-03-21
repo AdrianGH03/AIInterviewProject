@@ -1,42 +1,43 @@
 
-BASE FEATURES
-- Interviewee can input questions to study specific topics
-- Interviewee can select from pre-built topic questions if they don't have specific questions in mind
-- AI has a voice, and user's voice is also being recorded. Both voices are captured in a text log for review and feedback.
-- AI can provide feedback on the interviewee's answers, including suggestions for improvement and areas to focus on.
-- Interviewee can review past interview sessions, including the questions asked, their responses, and AI feedback.
-- How would scale of feedback work? Would it be a simple score, or more detailed feedback with specific suggestions for improvement?
-- Interviewee can select from technical interview or behavioral interview.
-- Technical interviews would need to allow for coding questions and run code in a sandbox.
-- Interviewee can set timer on interview sessions simulate a real interview
-
-ADVANCED FEATURES (FUTURE WORK)
-    - Interviewee's performance is based off Problem-Solving skills, code comprehension, communication skills, code quality, debugging skills, and time management.
-    - Interviewee can select from different difficulty levels for questions (easy, medium, hard).
-    - Interviewee can select from different programming languages for technical interviews but for now Python is the only option.
-    - Interviewee can select from different AI personalities for the interviewer (e.g., friendly, strict, technical).
-    - Interview can work similar to Anki flashcards where interviewee can review specific questions and answers to reinforce learning based on time intervals and difficulty level.
-        - This may need log in and user accounts to track progress and schedule reviews.
-
-Tech Stack: FastAPI, PostgreSQL, Docker, Whisper, Piper, Ollama, Angular, CSS, TypeScript, Monaco Editor, Tailwind CSS
-    
-CURRENT APP-FEATURES:
-- Interviewee can select from pre-built topic questions if they don't have specific questions in mind
-- AI has a voice, and user's voice is also being recorded. Both voices are captured in
-    a text log for review and feedback.
-- AI can provide feedback on the interviewee's answers, including suggestions for improvement and areas to focus on.
-- Interviewee can review past interview sessions, including the questions asked, their responses, and AI
-    feedback.
-- Interviewee can select from technical interview or behavioral interview.
-- Technical interviews would need to allow for coding questions and run code in a sandbox.
-- Interviewee can set timer on interview sessions simulate a real interview
-- Anki style review cards based on past interview sessions to reinforce learning based on time intervals and difficulty level.
-- Question banks can be generated from job descriptions to help interviewees prepare for specific roles.
-- user can customize their interview by selecting various topics, difficulty levels, and question types to tailor the interview experience to their specific needs and goals.
-- Interview sessions are tracked so that interviewees can monitor their progress over time and identify areas for improvement.
-
-
-To-do:
-- Different tones for the AI interviewer (friendly, strict, technical)
-- Easier questions, the prompt is currently generating very difficult questions that may be discouraging for users. Need to adjust the prompt to generate easier questions as well.
-- Add more detailed feedback for interviewee's answers, including specific suggestions for improvement and areas to focus on.
+Technical Skills
+Languages: HTML, CSS, JavaScript, TypeScript, Java, Python, SQL, C
+Frameworks & Libraries: React, Angular, Express.js, Next.js, FastAPI, Spring Boot
+Databases: MongoDB, PostgreSQL, Firebase
+Tools & Platforms: GitHub, Docker, Postman, VS Code, Eclipse, Vercel, AWS S3, Node.js
+Leadership Experience
+Scrum Master | Florida International University May 2024 - August 2024
+• Developed a back-end REST API in Java with Spring Boot for a mock online bookstore, contributing to a
+6-member Agile team while designing endpoints and handling structured data requests.
+• Ensured consistent sprint delivery, achieving 100% completion of sprint goals by coordinating standups, sprint
+planning, and development timelines.
+• Boosted team efficiency, reducing task turnaround time by mentoring teammates on debugging strategies, code
+reviews, and Agile development practices.
+Projects
+PrepPilot | Angular, TypeScript, Python, Tailwind CSS, PostgreSQL, Docker, FastAPI GitHub
+• Built an AI-powered full-stack interview application that simulates technical and behavioral interviews, allowing
+users to practice real interview conversations with instant, actionable feedback using Angular, FastAPI, and local
+LLM tools (Ollama, Whisper, Piper).
+• Improved interview preparation quality by capturing and organizing user responses into session histories, allowing
+users to review past interviews and identify communication and problem-solving gaps.
+• Enabled personalized interview preparation by generating role-specific question sets from job descriptions and
+tracking user performance across sessions using structured PostgreSQL data.
+AI Resume Analyzer | React, JavaScript, Python, CSS, PostgreSQL, AWS S3, Docker, FastAPI GitHub
+• Reduced manual resume customization time with a full-stack application that helps users tailor resumes to specific
+job descriptions faster through automated AI analysis, built with React, Python, FastAPI, and PostgreSQL.
+• Enhanced reliability across the frontend, backend, and data services, reducing deployment issues by using Docker
+and GitHub Actions to standardize builds and automate releases.
+• Implemented faster and secure resume uploads and analysis, allowing users to submit files and receive results
+without delays by storing and processing data through AWS S3 storage.
+BlitzDraft | React, JavaScript, CSS, MongoDB, Node.js, Express, Vercel GitHub | View Project
+• Deployed a full-stack drafting simulator game used to simulate team compositions and strategy in League of
+Legends, supporting 9,703+ monthly API requests through a scalable backend built with Express.js, Node.js, and
+MongoDB.
+• Analyzed player behavior trends, generating insights from 2,613+ user games by querying MongoDB collections and
+evaluating gameplay patterns to improve UI/UX decision making with React.
+• Optimized application performance reliability, reducing abusive traffic by implementing data validation, rate
+limiting, and authentication controls in Node.js.
+FandomFits | Next.js, React, JavaScript, CSS, Firebase, Vercel GitHub | View Project
+• Created a full-stack e-commerce storefront, supporting multiple product categories by managing and querying
+Firebase Firestore data for real-time inventory updates and accurate product tracking.
+• Designed scalable data-driven UI components, enabling seamless cross-device synchronization by integrating React
+and Next.js frontend rendering with dynamic Firebase Firestore data streams

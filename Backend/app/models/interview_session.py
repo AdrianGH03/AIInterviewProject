@@ -3,21 +3,19 @@ from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.database import Base
 
-
+#Interview Session log parameters created here 
 class InterviewSession(Base):
     __tablename__ = "interview_sessions"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    type: Mapped[str] = mapped_column(
-        String(50), nullable=False
-    )  #technical | behavioral
+    type: Mapped[str] = mapped_column(String(50), nullable=False) 
+
     topic: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    difficulty: Mapped[str] = mapped_column(
-        String(20), nullable=False
-    )  #easy | medium | hard
+    difficulty: Mapped[str] = mapped_column(String(20), nullable=False) 
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     time_started: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     time_ended: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    
     question_bank_id: Mapped[int | None] = mapped_column(
         ForeignKey("question_banks.id", ondelete="SET NULL"),
         nullable=True,

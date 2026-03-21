@@ -1,5 +1,3 @@
-"""Service for scraping job descriptions and generating categorized interview questions."""
-
 import json
 import logging
 import re
@@ -13,7 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 async def fetch_job_description(url: str) -> str:
-    """Fetch and extract job description text from a URL."""
+    
+    #Basically create a request as a client from the url paramete inputted from frontend
     async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
         headers = {
             "User-Agent": (
@@ -26,13 +25,14 @@ async def fetch_job_description(url: str) -> str:
         resp = await client.get(url, headers=headers)
         resp.raise_for_status()
 
+    #BeautifulSoup instance used to get url response text, and parser tool needed
     soup = BeautifulSoup(resp.text, "html.parser")
 
-    # Remove non-content elements
+    #Removes HTML elements boilerplate that the parser doesn't need.
     for element in soup(["script", "style", "nav", "header", "footer", "noscript"]):
         element.decompose()
 
-    # Try common job description selectors
+    #Try common job description selectors
     selectors = [
         ".job-description",
         ".description__text",
@@ -45,6 +45,7 @@ async def fetch_job_description(url: str) -> str:
         "main",
     ]
 
+    #Finds where job description or whatever selector appeared and cleans it to get the actual job ad as text.
     for selector in selectors:
         elements = soup.select(selector)
         if elements:
@@ -54,7 +55,7 @@ async def fetch_job_description(url: str) -> str:
             if len(text) > 100:
                 return _clean_text(text)
 
-    # Fallback: get the body text
+    #Fallback to get the <body> HTML element contents if selectors fail.
     body = soup.find("body")
     text = (
         body.get_text(separator="\n", strip=True)
@@ -64,6 +65,7 @@ async def fetch_job_description(url: str) -> str:
     return _clean_text(text)
 
 
+#Basic string cleaning/validation, removes any funny characters
 def _clean_text(text: str) -> str:
     """Clean extracted text."""
     lines = text.split("\n")
@@ -74,13 +76,12 @@ def _clean_text(text: str) -> str:
 
 
 async def categorize_and_generate_questions(job_description: str) -> dict:
-    """Use Ollama to categorize a job description and generate interview questions."""
     prompt = (
         "You are an expert technical recruiter and interview coach. "
         "Analyze the following job description and:\n"
         "1. Extract the key technical skills, technologies, and concepts mentioned.\n"
-        "2. Group them into categories (e.g. 'Python', 'SQL', 'System Design', 'ETL', 'Agile').\n"
-        "3. For each category, generate exactly 30 interview questions with this distribution:\n"
+        "2. Group them into categories (e.g. 'Python', 'SQL', 'System Design', 'ETL', 'Agile', 'JavaScript', 'Cloud Computing', 'Data Structures', 'Behavioral', 'Algorithms', 'Coding', 'JavaScript', 'React', 'CI/CD', 'SQL', 'TypeScript', etc.).\n"
+        "3. For each category (which would be its own question bank i.e. 30 JavaScript questions), generate exactly 30 interview questions with this distribution:\n"
         "   - 15 questions with difficulty 'easy'\n"
         "   - 10 questions with difficulty 'medium'\n"
         "   - 5 questions with difficulty 'hard'\n\n"
@@ -103,11 +104,13 @@ async def categorize_and_generate_questions(job_description: str) -> dict:
         f"Job Description:\n{job_description}"
     )
 
+    #Gets the Ollama response using the above prompt with query_ollama function from ollama_service.py
     response = await query_ollama(
         messages=[{"role": "user", "content": prompt}],
         system_prompt="You are a JSON-only response bot. Return ONLY valid JSON, no markdown fences, no explanation.",
     )
 
+    #Finds the JSON object in the response using regex, and if it fails, just return an empty categories list.
     try:
         json_match = re.search(r"\{[\s\S]*\}", response)
         if json_match:

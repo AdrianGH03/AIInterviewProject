@@ -16,9 +16,10 @@ from app.routes.speech_endpoints import router as speech_router
 from app.routes.job_endpoints import router as job_router
 from app.routes.review_endpoints import router as review_router
 
+#Create the backend server/FastAPI app
 app = FastAPI(title="AI Interview API", version="1.0.0")
 
-# CORS
+#Cors middleware to allow requests on frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.FRONTEND_URL],
@@ -27,10 +28,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# create tables
+#Create the tables with metadata created in models folder to fill out database initially
 Base.metadata.create_all(bind=engine)
 
-# REST routes
+#Attach the routes from the router files to the FastAPI app 
 app.include_router(question_bank_router)
 app.include_router(question_router)
 app.include_router(session_router)
@@ -45,7 +46,7 @@ app.include_router(review_router)
 # WebSocket route
 app.include_router(interview_ws_router)
 
-
+#App initialized route of / base route
 @app.get("/")
 def root():
     return {"message": "AI Interview API is running"}

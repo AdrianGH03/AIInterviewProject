@@ -3,7 +3,7 @@ from sqlalchemy import String, Text, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.database import Base
 
-
+#Question bank parameters created here, reference feedback.py for more info
 class QuestionBank(Base):
     __tablename__ = "question_banks"
 

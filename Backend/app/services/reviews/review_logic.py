@@ -5,9 +5,8 @@ from sqlalchemy.orm import Session
 from app.models.review_card import ReviewCard
 from app.schemas.review_card import ReviewCardCreate
 
-
+#Same concepts as in interviewee_logic.py in services/interviewees
 def create_review_card(db: Session, data: ReviewCardCreate) -> ReviewCard:
-    # Return existing card if one already exists for this question
     existing = (
         db.query(ReviewCard)
         .filter(ReviewCard.question_id == data.question_id)
@@ -46,20 +45,16 @@ def get_due_cards(db: Session) -> list[ReviewCard]:
 
 
 def review_card(db: Session, card_id: int, quality: int) -> ReviewCard | None:
-    """Apply SM-2 algorithm to update card schedule.
-
-    quality: 1=Again, 2=Hard, 3=Good, 4=Easy
-    Maps to SM-2 quality scale: 1->1, 2->2, 3->4, 4->5
-    """
     card = get_review_card(db, card_id)
     if not card:
         return None
 
-    # Map 1-4 rating to SM-2's 0-5 scale
+    #Quality is 1-5 where 5 is perfect recall and 1 is they dont know
+    #SM2 algorithm is the same algo that Anki uses to space out flashcard reviews based on how well the user recalled the information. It adjusts the review intervals and ease factor based on the quality of recall.
     sm2_quality = {1: 1, 2: 2, 3: 4, 4: 5}.get(quality, 3)
 
+    #Set the interval in which the user needs to review the card again based on quality of their recall.
     if sm2_quality < 3:
-        # Failed — reset
         card.repetitions = 0
         card.interval_days = 1
     else:
@@ -73,13 +68,15 @@ def review_card(db: Session, card_id: int, quality: int) -> ReviewCard | None:
             )
         card.repetitions += 1
 
-    # Update ease factor
+    #Ease factor is used in SM2 algorithm to control hwo fast interval between review grows.
+    #The following just sets the ease factor to a SM2 algo formula for updating ease factors.
     card.ease_factor = max(
         1.3,
         card.ease_factor
         + (0.1 - (5 - sm2_quality) * (0.08 + (5 - sm2_quality) * 0.02)),
     )
 
+    #Card review time captured to accurately track when user last reviewed and when review time is due again.
     card.last_reviewed_at = datetime.now(timezone.utc)
     card.next_review_at = datetime.now(timezone.utc) + timedelta(
         days=card.interval_days
@@ -98,7 +95,7 @@ def delete_review_card(db: Session, card_id: int) -> bool:
     db.commit()
     return True
 
-
+#Gets the review stats of user based on last tiem reviewed and today's date
 def get_review_stats(db: Session) -> dict:
     now = datetime.now(timezone.utc)
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)

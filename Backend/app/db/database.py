@@ -10,7 +10,7 @@ from app.config import settings #import settings from config.py to access DATABA
 from sqlalchemy.exc import SQLAlchemyError
 
 
-class Base(DeclarativeBase): #Creates base class for all models/schemas
+class Base(DeclarativeBase): #Creates base class for all models/schemas, used for declaring classes
     pass
 
 
@@ -19,6 +19,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 #Creates a session factory. autocommit=False means that changes won't be commited, where autoflush=False means that changes won't be flushed to the database until you explicitly call session.commit().
 # bind=engine means that the session will use the engine we created to connect to the database. 
 
+#Simple logging for the database for the terminal to see that no errors occurred when creating/running the db
 try:
     with engine.connect() as conn:
         conn.execute(text("SELECT 1"))

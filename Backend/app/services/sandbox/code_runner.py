@@ -1,11 +1,9 @@
-"""Sandboxed code execution service for technical interview coding questions."""
-
 import subprocess
 import tempfile
 import os
 from pathlib import Path
 
-
+#Allows which language the sandbox environemnt can run
 ALLOWED_LANGUAGES = {
     "python": {
         "extension": ".py",
@@ -16,16 +14,6 @@ ALLOWED_LANGUAGES = {
 
 
 def run_code(language: str, code: str, stdin_input: str = "") -> dict:
-    """Execute code in a sandboxed subprocess and return the result.
-
-    Args:
-        language: Programming language (currently only "python").
-        code: Source code to execute.
-        stdin_input: Optional stdin input for the program.
-
-    Returns:
-        Dict with keys: stdout, stderr, exit_code, timed_out
-    """
     lang_config = ALLOWED_LANGUAGES.get(language)
     if not lang_config:
         return {
@@ -35,7 +23,8 @@ def run_code(language: str, code: str, stdin_input: str = "") -> dict:
             "timed_out": False,
         }
 
-    # Write code to a temporary file
+    #Same thing as creating a main.py file and running it, except its temporary for the code environment to run in a sandbox.
+    #Mode w means write, suffix is the file extension based on the language above, delete = delete file after runnign the code
     with tempfile.NamedTemporaryFile(
         mode="w",
         suffix=lang_config["extension"],
@@ -45,22 +34,25 @@ def run_code(language: str, code: str, stdin_input: str = "") -> dict:
         temp_path = f.name
 
     try:
-        cmd = lang_config["command"] + [temp_path]
+        #this basically says ["python", "-u", "/tmp/some_random_name.py"]
+        cmd = lang_config["command"] + [temp_path] 
+
+        #create env variables and tells python not to create boilerplate like pycache files
         env = {
             "PATH": os.environ.get("PATH", ""),
             "PYTHONDONTWRITEBYTECODE": "1",
         }
 
         proc = subprocess.run(
-            cmd,
-            input=stdin_input,
-            capture_output=True,
-            text=True,
-            timeout=lang_config["timeout"],
-            env=env,
-            cwd=tempfile.gettempdir(),
-        )
-
+        cmd,                              #the command to execute
+        input=stdin_input,                #text fed to the program's stdin (like typing into it)
+        capture_output=True,              #capture stdout and stderr instead of printing to terminal
+        text=True,                        #treat input/output as strings, not raw bytes
+        timeout=lang_config["timeout"],   #kill the process after 10 seconds
+        env=env,                          #the restricted environment from above
+        cwd=tempfile.gettempdir(),        #run in the temp directory (e.g. /tmp)
+    )
+        #end program after 10000 chars of stdout or 5000 chars of stderr to prevent flooding the response with too much data
         return {
             "stdout": proc.stdout[:10000],
             "stderr": proc.stderr[:5000],
@@ -74,5 +66,6 @@ def run_code(language: str, code: str, stdin_input: str = "") -> dict:
             "exit_code": -1,
             "timed_out": True,
         }
+    #Cleanup the temp file after execution to prevent buildup of files on the server.
     finally:
         Path(temp_path).unlink(missing_ok=True)

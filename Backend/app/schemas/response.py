@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-
+#refer to feedback.py, same concepts.
 class ResponseBase(BaseModel):
     type_of_response: str
     question_id: int | None = None

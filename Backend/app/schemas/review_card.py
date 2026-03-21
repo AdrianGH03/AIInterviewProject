@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-
+#refer to feedback.py, same concepts.
 class ReviewCardBase(BaseModel):
     question_id: int
     notes: str | None = None
@@ -31,7 +31,7 @@ class ReviewCardWithQuestion(ReviewCardRead):
 
 
 class ReviewRequest(BaseModel):
-    quality: int  # 1=Again, 2=Hard, 3=Good, 4=Easy
+    quality: int  
 
 
 class ReviewStats(BaseModel):

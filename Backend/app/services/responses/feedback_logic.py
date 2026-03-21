@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.models import Feedback
 from app.schemas.feedback import FeedbackCreate
 
-
+#Same concepts as in interviewee_logic.py in services/interviewees
 def create_feedback(db: Session, data: FeedbackCreate) -> Feedback:
     feedback = Feedback(
         feedback_text=data.feedback_text,

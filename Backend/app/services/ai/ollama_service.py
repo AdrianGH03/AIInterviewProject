@@ -1,16 +1,15 @@
-"""Service for interacting with Ollama LLM for interview conversations."""
-
 import httpx
-
+#httpx, (async and await for ollama server) and env variables imported
 from app.config import settings
 
+#system prompts declare the prompts for the ollama model
 SYSTEM_PROMPTS = {
     "technical": (
         "You are an experienced senior software engineer conducting a technical interview "
-        "at a top tech company. Your role is to evaluate the candidate's technical skills "
+        "at a tech company hiring a new graduate engineer or entry-level developer. Your role is to evaluate the candidate's technical skills "
         "through focused, realistic interview questions.\n\n"
         "RULES:\n"
-        "- Ask ONE clear question at a time. Do not ask multiple questions in a single turn.\n"
+        "- Ask ONE clear question at a time. Do not ask multiple questions in a single turn. Wait for the answer to be complete before asking the next question. This means to eventually help them get a suitable answer before asking the next question.\n"
         "- After the candidate answers, carefully evaluate their response before declaring it "
         "correct or incorrect. Read their answer thoroughly and give credit for partial correctness, "
         "correct reasoning, or answers that demonstrate understanding even if imprecisely worded.\n"
@@ -27,8 +26,8 @@ SYSTEM_PROMPTS = {
         "- Keep each response under 150 words unless explaining a complex concept.\n"
     ),
     "behavioral": (
-        "You are an experienced hiring manager conducting a behavioral interview "
-        "at a top tech company. Your role is to assess the candidate's soft skills, "
+        "You are an experienced technical hiring manager conducting a behavioral interview "
+        "at a tech company hiring a new graduate engineer or entry-level developer. Your role is to assess the candidate's soft skills, "
         "leadership, teamwork, and problem-solving through situational questions.\n\n"
         "RULES:\n"
         "- Ask ONE behavioral question at a time using the STAR framework "
@@ -46,24 +45,26 @@ SYSTEM_PROMPTS = {
 
 DIFFICULTY_CONTEXT = {
     "easy": "Target entry-level / junior developer skills. Ask fundamental concepts and straightforward problems.",
-    "medium": "Target mid-level developer skills (2-4 years experience). Ask questions requiring deeper understanding and trade-off analysis.",
-    "hard": "Target senior-level developer skills. Ask questions involving system design, scalability, edge cases, and advanced concepts.",
+    "medium": "Target entry-level / junior developer skills. Ask questions requiring deeper understanding and trade-off analysis.",
+    "hard": "Target entry-level / junior developer skills. Ask questions involving system design, scalability, edge cases, and advanced concepts.",
 }
 
-
+# the _ at the beginning means private, so cant be shared outside this file.
+# function to build the system prompt to the AI
 def _build_system_prompt(
     interview_type: str, topic: str, difficulty: str
 ) -> str:
     base = SYSTEM_PROMPTS.get(interview_type, SYSTEM_PROMPTS["technical"])
-    diff = DIFFICULTY_CONTEXT.get(difficulty, DIFFICULTY_CONTEXT["medium"])
+    diff = DIFFICULTY_CONTEXT.get(difficulty, DIFFICULTY_CONTEXT["easy"])
     return f"{base}\n\nTopic: {topic}\n{diff}"
 
+#1. Creates the system prompt
+#2. Create the http rquest to ollama API using the model and system prompt, return it as parsed JSON.
 
 async def query_ollama(
     messages: list[dict[str, str]],
     system_prompt: str = "",
 ) -> str:
-    """Low-level Ollama query with an optional system prompt."""
     ollama_messages = []
     if system_prompt:
         ollama_messages.append({"role": "system", "content": system_prompt})
@@ -83,23 +84,14 @@ async def query_ollama(
         return data["message"]["content"]
 
 
+#Basically the past two functions combined to easily chat with Ollama
+#Entire chat history is stored in messages, from AI chats to User inputs on frontend.
 async def chat_with_ollama(
     messages: list[dict[str, str]],
     interview_type: str = "technical",
     topic: str = "General",
-    difficulty: str = "medium",
+    difficulty: str = "easy",
 ) -> str:
-    """Send a conversation to Ollama and get a response.
-
-    Args:
-        messages: List of {"role": "user"|"assistant", "content": "..."} dicts.
-        interview_type: "technical" or "behavioral".
-        topic: The interview topic (e.g. "Python", "React", "System Design").
-        difficulty: "easy", "medium", or "hard".
-
-    Returns:
-        The assistant's reply text.
-    """
     system_prompt = _build_system_prompt(interview_type, topic, difficulty)
 
     ollama_messages = [{"role": "system", "content": system_prompt}] + messages
@@ -117,14 +109,13 @@ async def chat_with_ollama(
         data = resp.json()
         return data["message"]["content"]
 
-
+#Generates the ollama prompt for providing feedback
 async def generate_feedback(
     question_text: str,
     answer_text: str,
     interview_type: str = "technical",
     topic: str = "General",
 ) -> str:
-    """Generate detailed feedback on a candidate's answer."""
     prompt = (
         f"You are an expert {interview_type} interviewer providing a final session review.\n\n"
         f"Interview Topic: {topic}\n\n"
@@ -145,17 +136,17 @@ async def generate_feedback(
     )
 
 
+#Prompt the Ollama AI to create a opening question for start of interview then begin a chat with it.
 async def generate_opening_question(
     interview_type: str, topic: str, difficulty: str
 ) -> str:
-    """Generate the first interview question to kick off a session."""
     messages = [
         {
             "role": "user",
             "content": (
                 f"Begin this {interview_type} interview on the topic of {topic}. "
                 f"Ask a single {difficulty}-level question to start. "
-                f"Output only the question — no greetings, no preamble, no numbering."
+                f"Output only the question — give a greeting, no preamble, no numbering."
             ),
         }
     ]

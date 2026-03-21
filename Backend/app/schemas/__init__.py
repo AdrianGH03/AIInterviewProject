@@ -6,6 +6,7 @@ from app.schemas.interview_session import InterviewSessionCreate, InterviewSessi
 from app.schemas.interviewee import IntervieweeCreate, IntervieweeRead
 from app.schemas.review_card import ReviewCardCreate, ReviewCardRead, ReviewCardWithQuestion
 
+#Same as models init, it creates an import for all schemas to access at once.
 __all__ = [
     "QuestionBankCreate",
     "QuestionBankRead",

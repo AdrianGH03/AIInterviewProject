@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-
+#refer to feedback.py, same concepts.
 class IntervieweeBase(BaseModel):
     name: str
 

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.models import Response
 from app.schemas.response import ResponseCreate
 
-
+#Same concepts as in interviewee_logic.py in services/interviewees
 def create_response(db: Session, data: ResponseCreate) -> Response:
     response = Response(
         type_of_response=data.type_of_response,

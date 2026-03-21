@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.models import InterviewSession
 from app.schemas.interview_session import InterviewSessionCreate
 
-
+#Same concepts as in interviewee_logic.py in services/interviewees
 def create_interview_session(db: Session, data: InterviewSessionCreate) -> InterviewSession:
     session = InterviewSession(
         type=data.type,
