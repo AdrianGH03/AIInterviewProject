@@ -48,7 +48,10 @@
 
 ## 🎥 Demo and Screenshots
 
-https://github.com/user-attachments/assets/f356fcf3-052f-4f55-96d8-3cf4a341861e
+
+
+https://github.com/user-attachments/assets/ecdbba2a-9697-4d9d-b0c0-bcc271b64982
+
 
 
 
